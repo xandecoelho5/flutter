@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/utils/app_routes.dart';
 
+import '../exceptions/http_exception.dart';
 import '../models/product.dart';
 import '../models/product_list.dart';
 
@@ -12,6 +13,8 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
+
     return ListTile(
       leading: CircleAvatar(backgroundImage: NetworkImage(product.imageUrl)),
       title: Text(product.name),
@@ -21,7 +24,8 @@ class ProductItem extends StatelessWidget {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(AppRoutes.PRODUCT_FORM, arguments: product);
+                Navigator.of(context)
+                    .pushNamed(AppRoutes.PRODUCT_FORM, arguments: product);
               },
               icon: const Icon(Icons.edit),
               color: Theme.of(context).primaryColor,
@@ -35,14 +39,23 @@ class ProductItem extends StatelessWidget {
                     content: const Text('Tem certeza?'),
                     actions: [
                       TextButton(
-                          onPressed: () => Navigator.of(ctx).pop(false), child: const Text('Não')),
+                          onPressed: () => Navigator.of(ctx).pop(false),
+                          child: const Text('Não')),
                       TextButton(
-                          onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Sim')),
+                          onPressed: () => Navigator.of(ctx).pop(true),
+                          child: const Text('Sim')),
                     ],
                   ),
-                ).then((value) {
+                ).then((value) async {
                   if (value ?? false) {
-                    Provider.of<ProductList>(context, listen: false).removeProduct(product);
+                    try {
+                      await Provider.of<ProductList>(context, listen: false)
+                          .removeProduct(product);
+                    } on HttpException catch (error) {
+                      msg.showSnackBar(SnackBar(
+                        content: Text(error.toString()),
+                      ));
+                    }
                   }
                 });
               },
