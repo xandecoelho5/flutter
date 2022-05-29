@@ -4,6 +4,8 @@ import 'package:shop/models/cart.dart';
 import 'package:shop/models/product.dart';
 import 'package:shop/utils/app_routes.dart';
 
+import '../models/auth.dart';
+
 class ProductGridItem extends StatelessWidget {
   const ProductGridItem({Key? key}) : super(key: key);
 
@@ -11,6 +13,7 @@ class ProductGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -19,8 +22,10 @@ class ProductGridItem extends StatelessWidget {
           backgroundColor: Colors.black87,
           leading: Consumer<Product>(
             builder: (ctx, product, _) => IconButton(
-              onPressed: () => product.toggleFavorite(),
-              icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+              onPressed: () =>
+                  product.toggleFavorite(auth.token ?? '', auth.userId ?? ''),
+              icon: Icon(
+                  product.isFavorite ? Icons.favorite : Icons.favorite_border),
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
@@ -48,8 +53,8 @@ class ProductGridItem extends StatelessWidget {
           ),
         ),
         child: GestureDetector(
-          onTap: () =>
-              Navigator.of(context).pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: product),
+          onTap: () => Navigator.of(context)
+              .pushNamed(AppRoutes.PRODUCT_DETAIL, arguments: product),
           child: Image.network(
             product.imageUrl,
             fit: BoxFit.cover,

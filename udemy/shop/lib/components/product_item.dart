@@ -35,7 +35,10 @@ class ProductItem extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: const Text('Excluir Produto'),
+                    title: const Text(
+                      'Excluir Produto',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     content: const Text('Tem certeza?'),
                     actions: [
                       TextButton(
