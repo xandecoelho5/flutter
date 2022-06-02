@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         title: 'Pomodoro',
         theme: ThemeData(
           primarySwatch: Colors.blue,
+          platform: TargetPlatform.iOS,
         ),
         home: const Pomodoro(),
       ),

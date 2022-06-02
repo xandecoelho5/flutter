@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
                 primary: Colors.indigo,
                 secondary: Colors.amber,
               ),
+          platform: TargetPlatform.iOS,
         ),
         routes: {
           AppRoutes.HOME: (ctx) => const PlacesListScreen(),
