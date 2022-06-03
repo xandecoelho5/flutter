@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:expenses/components/chart.dart';
@@ -48,6 +47,7 @@ class ExpensesApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        platform: TargetPlatform.iOS,
       ),
     );
   }
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _getIconButton(IconData icon, Function() fn) {
-    return Platform.isIOS
+    return Theme.of(context).platform.name == 'iOS'
         ? GestureDetector(onTap: fn, child: Icon(icon))
         : IconButton(onPressed: fn, icon: Icon(icon));
   }
@@ -102,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     bool isLandscape = mediaQuery.orientation == Orientation.landscape;
-    bool isIOS = Platform.isIOS;
+    bool isIOS = Theme.of(context).platform.name == 'iOS';
 
     final iconList = isIOS ? CupertinoIcons.refresh : Icons.list;
     final chartList = isIOS ? CupertinoIcons.refresh : Icons.show_chart;

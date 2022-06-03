@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +10,8 @@ class AdaptativeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isIOS
+    final isIOS = Theme.of(context).platform.name == 'iOS';
+    return isIOS
         ? CupertinoButton(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             onPressed: onPressed,
