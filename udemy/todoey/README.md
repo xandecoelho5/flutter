@@ -1,16 +1,23 @@
-# todoey
+# Todoey ✓
 
-A new Flutter project.
+## Goal
 
-## Getting Started
+The objective of this tutorial is to understand how to manage state in Flutter. We'll look at various Flutter architecture choices and learn to use the officially recommended Provider package to manage our app state.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## What was created
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+A todolist app to keep track of all your tasks.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## What was learned
+
+- Understand what is state and why we need to manage it.
+- Understand the difference between ephemeral (local) state and app state.
+- See the problems with simply relying on setState().
+- Learn about the concept of Prop Drilling.
+- Examine various popular ways of managing app state for Flutter projects.
+- Learn about the List Builder.
+- Use the Flutter BottomSheet Widget.
+- Learn to lift state up to be able to access it from children widgets.
+- Learn about design patterns and why they are useful.
+- Understand how the Provider package works and use it to manage app state.
