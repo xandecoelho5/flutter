@@ -18,12 +18,19 @@ class _PriceScreenState extends State<PriceScreen> {
   @override
   void initState() {
     super.initState();
-    cryptoList.map((c) => coinValues[c] = null);
     _getData();
+  }
+
+  void _clearValues() {
+    for (var c in cryptoList) {
+      coinValues[c] = null;
+    }
+    setState(() {});
   }
 
   void _getData() async {
     final coinData = CoinData();
+    _clearValues();
 
     for (String crypto in cryptoList) {
       coinValues[crypto] = await coinData.getCoinData(
@@ -31,6 +38,7 @@ class _PriceScreenState extends State<PriceScreen> {
         quote: _selectedCurrency!,
       );
     }
+    setState(() {});
   }
 
   DropdownButton<String> androidDropdown() {
@@ -44,10 +52,10 @@ class _PriceScreenState extends State<PriceScreen> {
     return DropdownButton<String>(
       value: _selectedCurrency,
       items: dropdownItems,
-      onChanged: (value) => setState(() {
+      onChanged: (value) {
         _selectedCurrency = value;
         _getData();
-      }),
+      },
     );
   }
 

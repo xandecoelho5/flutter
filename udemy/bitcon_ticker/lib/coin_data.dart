@@ -45,14 +45,12 @@ class CoinData {
       headers: headers,
     );
 
-    print(response.statusCode);
-    print(response.body);
-
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return (data['rate'] as double).toInt();
+      final rate = jsonDecode(response.body)['rate'] as double;
+      return rate.toInt();
     } else {
-      print('deu ruim');
+      print(response.statusCode);
+      print(response.body);
     }
     return Future.value(null);
   }
