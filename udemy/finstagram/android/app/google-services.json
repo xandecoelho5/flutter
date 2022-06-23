@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "183255749716",
+    "project_id": "finstagram-udemy-7987d",
+    "storage_bucket": "finstagram-udemy-7987d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:183255749716:android:08c19b2cd8cbb379f889c1",
+        "android_client_info": {
+          "package_name": "com.xandecoelho5.finstagram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "183255749716-vs1j9su8mvsfkoc8i4mmtvo0j7j46sm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJyHP8ozJMx5fmP9SdQ-9n_Ui-fjOQyXM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "183255749716-vs1j9su8mvsfkoc8i4mmtvo0j7j46sm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
