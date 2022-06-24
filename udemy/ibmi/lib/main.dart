@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ibmi/pages/main_page.dart';
+import 'package:ibmi/utils/calculator.dart';
 
 void main() {
+  calculateBMIAsync(Dio());
   runApp(const MyApp());
 }
 

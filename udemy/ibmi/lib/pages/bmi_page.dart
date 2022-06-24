@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ibmi/utils/calculator.dart';
 import 'package:ibmi/widgets/info_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,7 @@ class BMIPage extends StatefulWidget {
 class _BMIPageState extends State<BMIPage> {
   double? _deviceHeight, _deviceWidth;
 
-  int _age = 25, _weight = 150, _height = 70, _gender = 0;
+  int _age = 25, _weight = 160, _height = 70, _gender = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class _BMIPageState extends State<BMIPage> {
 
     return CupertinoPageScaffold(
       child: Center(
-        child: Container(
+        child: SizedBox(
           height: _deviceHeight! * 0.85,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -65,6 +66,7 @@ class _BMIPageState extends State<BMIPage> {
               SizedBox(
                 width: 50,
                 child: CupertinoDialogAction(
+                  key: const Key('age_minus'),
                   textStyle: const TextStyle(fontSize: 25, color: Colors.red),
                   onPressed: () => setState(() => _age--),
                   child: const Text('-'),
@@ -73,6 +75,7 @@ class _BMIPageState extends State<BMIPage> {
               SizedBox(
                 width: 50,
                 child: CupertinoDialogAction(
+                  key: const Key('age_plus'),
                   textStyle: const TextStyle(fontSize: 25, color: Colors.blue),
                   onPressed: () => setState(() => _age++),
                   child: const Text('+'),
@@ -106,6 +109,7 @@ class _BMIPageState extends State<BMIPage> {
               SizedBox(
                 width: 50,
                 child: CupertinoDialogAction(
+                  key: const Key('weight_minus'),
                   textStyle: const TextStyle(fontSize: 25, color: Colors.red),
                   onPressed: () => setState(() => _weight--),
                   child: const Text('-'),
@@ -114,6 +118,7 @@ class _BMIPageState extends State<BMIPage> {
               SizedBox(
                 width: 50,
                 child: CupertinoDialogAction(
+                  key: const Key('weight_plus'),
                   textStyle: const TextStyle(fontSize: 25, color: Colors.blue),
                   onPressed: () => setState(() => _weight++),
                   child: const Text('+'),
@@ -186,7 +191,7 @@ class _BMIPageState extends State<BMIPage> {
         child: const Text('Calculate BMI'),
         onPressed: () {
           if (_height > 0 && _weight > 0 && _age > 0) {
-            double bmi = 703 * (_weight / (_height * _height));
+            double bmi = calculateBMI(_height, _weight);
             _showResultDialog(bmi);
           }
         },
