@@ -135,7 +135,9 @@ class _ConfigurationPageState extends State<ConfigurationPage>
               const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Colors.black),
-                onPressed: () {},
+                onPressed: () {
+                  bloc.add(RemoveAllOrdersEvent());
+                },
                 child: const Text('Reiniciar filas'),
               ),
             ],

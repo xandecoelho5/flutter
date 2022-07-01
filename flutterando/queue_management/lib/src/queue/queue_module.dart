@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 import 'package:queue_management/src/queue/domain/repositories/queue_repository.dart';
 import 'package:queue_management/src/queue/domain/usecases/add_new_queue.dart';
+import 'package:queue_management/src/queue/domain/usecases/generate_order.dart';
 import 'package:queue_management/src/queue/domain/usecases/get_all_queues.dart';
+import 'package:queue_management/src/queue/domain/usecases/remove_all_orders.dart';
 import 'package:queue_management/src/queue/domain/usecases/remove_queue.dart';
+import 'package:queue_management/src/queue/domain/usecases/update_queue.dart';
 import 'package:queue_management/src/queue/external/queue_firestore_datasource.dart';
 import 'package:queue_management/src/queue/infra/datasource/queue_datasource.dart';
 import 'package:queue_management/src/queue/infra/repositories/queue_repository.dart';
@@ -18,4 +21,8 @@ final queueModule = [
   Provider<IGetAllQueues>(create: (context) => GetAllQueues(context.read())),
   Provider<IAddNewQueue>(create: (context) => AddNewQueue(context.read())),
   Provider<IRemoveQueue>(create: (context) => RemoveQueue(context.read())),
+  Provider<IRemoveAllOrders>(
+      create: (context) => RemoveAllOrders(context.read())),
+  Provider<IGenerateOrder>(create: (context) => GenerateOrder()),
+  Provider<IUpdateQueue>(create: (context) => UpdateQueue(context.read())),
 ];
