@@ -22,12 +22,13 @@ class ConfigurationBloc extends Bloc<ConfigurationEvent, ConfigurationState> {
     on<RemoveQueueEvent>(_removeQueue, transformer: sequential());
   }
 
-  Future<void> _fetchQueues(event, emit) async {
+  Future<void> _fetchQueues(event, Emitter emit) async {
     emit(LoadingConfigurationState());
 
     await emit.onEach<List<QueueEntity>>(
       getAllQueuesUsecase.call(),
       onData: (queues) => emit(LoadedConfigurationState(queues)),
+      onError: (err, st) => emit(ExceptionConfigurationState(err.toString())),
     );
   }
 
