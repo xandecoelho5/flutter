@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/exercise.dart';
+import '../utils/constants.dart';
 
 class ExerciseScreen extends StatefulWidget {
   const ExerciseScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         ),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: const Color(0xFF5B3FFF),
+      selectedItemColor: kPurple,
       unselectedItemColor: Colors.grey,
       onTap: (index) => setState(() => _selectedIndex = index),
     );
@@ -50,14 +51,23 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
       restSeconds: 20,
     );
 
+    const shadows = [
+      Shadow(
+        blurRadius: 4,
+        color: Color.fromRGBO(0, 0, 0, 0.25),
+        offset: Offset(0, 4),
+      ),
+    ];
+
     _infoColumn(title, value) => Column(
           children: [
             Text(
               title,
               style: const TextStyle(
-                color: Colors.grey,
+                color: Color(0xFF938989),
                 fontWeight: FontWeight.w500,
-                fontSize: 20,
+                fontSize: 25,
+                shadows: shadows,
               ),
             ),
             SizedBox(height: _deviceHeight * 0.003),
@@ -65,8 +75,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               value,
               style: const TextStyle(
                 color: Color(0xFF9E2D8C),
-                fontSize: 18,
+                fontSize: 25,
                 fontWeight: FontWeight.w500,
+                shadows: shadows,
               ),
             ),
           ],
@@ -91,22 +102,30 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
               children: [
                 Text(
                   exercise.name,
-                  style: const TextStyle(fontSize: 22),
+                  style: const TextStyle(
+                    fontFamily: 'Actor',
+                    fontSize: 30,
+                    color: Color(0xFF333333),
+                    shadows: shadows,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color.fromRGBO(134, 0, 255, 1),
-                    fixedSize: const Size(210, 35),
+                    primary: kPurple,
+                    fixedSize: Size(_deviceWidth * 0.75, 48),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(7),
+                    ),
+                    elevation: 5,
                   ),
                   onPressed: () {},
                   child: const Text(
                     'Done!',
                     style: TextStyle(
+                      fontFamily: 'Actor',
                       color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w300,
-                      letterSpacing: 1,
+                      fontSize: 30,
                     ),
                   ),
                 ),

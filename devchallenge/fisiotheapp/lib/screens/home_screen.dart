@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -34,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color(0xFF5B3FFF),
+        selectedItemColor: kPurple,
         unselectedItemColor: Colors.grey,
         onTap: (index) => setState(() => _selectedIndex = index),
       );
@@ -53,35 +55,38 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const Text(
               'Hey, Lorena!',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(
+                fontFamily: 'Actor',
+                fontSize: 30,
+                color: Color(0xFF333333),
+              ),
             ),
             SizedBox(height: _deviceHeight * 0.048),
-            Text(
+            const Text(
               'Let\'s start your treatment? :)',
               style: TextStyle(
-                color: Colors.grey.shade800,
-                fontSize: 27,
-                height: 1,
+                color: Color(0xFF4F4F4F),
+                fontSize: 25,
+                height: 1.1,
               ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: _deviceHeight * 0.06),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: const Color(0xFF5B3FFF),
+                primary: kPurple,
                 fixedSize: Size(_deviceWidth * 0.8, 48),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(7),
                 ),
               ),
               onPressed: () => Navigator.pushNamed(context, '/exercise'),
               child: const Text(
                 'Start',
                 style: TextStyle(
+                  fontFamily: 'Actor',
                   color: Colors.white,
-                  fontWeight: FontWeight.w300,
-                  fontSize: 24,
-                  letterSpacing: 1,
+                  fontSize: 25,
                 ),
               ),
             ),

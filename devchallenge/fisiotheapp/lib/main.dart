@@ -1,5 +1,6 @@
 import 'package:fisiotheapp/screens/exercise_screen.dart';
 import 'package:fisiotheapp/screens/home_screen.dart';
+import 'package:fisiotheapp/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,8 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fisiotheapp',
       theme: ThemeData(
-        primaryColor: const Color(0xFF5B3FFF),
-        fontFamily: 'SF-Pro-Display',
+        primaryColor: kPurple,
+        fontFamily: 'ABeeZee',
       ),
       debugShowCheckedModeBanner: false,
       routes: {
