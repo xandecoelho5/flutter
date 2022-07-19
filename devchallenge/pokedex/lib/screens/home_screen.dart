@@ -2,8 +2,12 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokedex/components/badge.dart';
+import 'package:pokedex/screens/profile_screen.dart';
 
 import '../models/pokemon.dart';
+import '../utils/constants.dart';
+import '../utils/mocks.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +19,23 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late double _deviceWidth;
   late double _deviceHeight;
+  late final FocusNode _searchFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _requestFocus() {
+    setState(() => FocusScope.of(context).requestFocus(_searchFocusNode));
+  }
 
   _appBar() {
     _svgIcon(assetName) {
@@ -43,105 +64,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _searchBar() {
-    final textColor = Colors.grey.shade600; //Color.fromRGBO(153, 153, 155, 1);
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(10),
-      borderSide: const BorderSide(color: Colors.transparent),
+      borderSide: const BorderSide(color: Colors.transparent, width: 0),
     );
 
-    // TODO change selection color of search bar
     return TextField(
+      onTap: _requestFocus,
+      focusNode: _searchFocusNode,
       decoration: InputDecoration(
         focusedBorder: border,
         enabledBorder: border,
-        fillColor: const Color.fromRGBO(242, 242, 242, 1),
+        fillColor: _searchFocusNode.hasFocus
+            ? kBackgroundPressedInput
+            : kBackgroundDefaultInput,
+        hoverColor: kBackgroundPressedInput,
         filled: true,
         hintText: 'What Pokémon are you looking for?',
-        hintStyle: TextStyle(color: textColor),
+        hintStyle: const TextStyle(color: kTextGrey),
         prefixIconConstraints: BoxConstraints(minWidth: _deviceWidth * 0.11),
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           Icons.search,
-          color: textColor,
+          color: kTextGrey,
           size: 20,
         ),
       ),
-      cursorColor: textColor,
-      style: TextStyle(color: textColor),
+      style: const TextStyle(color: kTextBlack),
     );
   }
 
   _pokemonList() {
-    const pokemons = [
-      Pokemon(
-        pokedexNumber: 1,
-        name: 'Bulbasaur',
-        imageUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-        types: [PokemonTypes.grass, PokemonTypes.poison],
-      ),
-      Pokemon(
-        pokedexNumber: 4,
-        name: 'Charmander',
-        // imageUrl: 'assets/generations/generation1/004.png',
-        imageUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
-        types: [PokemonTypes.fire],
-      ),
-      Pokemon(
-        pokedexNumber: 7,
-        name: 'Squirtle',
-        // imageUrl: 'assets/generations/generation1/007.png',
-        imageUrl:
-            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
-        types: [PokemonTypes.water],
-      )
-    ];
-
-    // TODO pick correct colors for pokemon types
     // TODO align correctly the pokemon type inside the container
     _pokemonCard(Pokemon pokemon) {
       _info() {
-        _types() {
-          return Row(
-            children: pokemon.types.map((type) {
-              return Container(
-                height: _deviceHeight * 0.032,
-                padding: const EdgeInsets.only(
-                  right: 4,
-                  top: 4,
-                  bottom: 4,
-                ),
-                margin: EdgeInsets.only(right: _deviceWidth * 0.015),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: type.foregroundColor,
-                ),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/types/${type.name}.svg',
-                      color: Colors.white,
-                    ),
-                    Text(
-                      type.type,
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          );
-        }
-
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '#${pokemon.pokedexNumber.toString().padLeft(3, '0')}',
-              style: const TextStyle(
-                color: Colors.black87,
+              style: TextStyle(
+                color: kTextNumber,
                 fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
             ),
             Text(
@@ -152,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 26,
               ),
             ),
-            _types(),
+            Row(
+              children: pokemon.types.map((type) => Badge(type)).toList(),
+            ),
           ],
         );
       }
@@ -211,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Container(
           padding: EdgeInsets.symmetric(
             horizontal: _deviceWidth * 0.05,
-            vertical: _deviceHeight * 0.025,
+            vertical: _deviceHeight * 0.02,
           ),
           height: _deviceHeight * 0.17,
           decoration: BoxDecoration(
@@ -222,51 +189,63 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
 
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: pokemon.types.first.backgroundColor,
-              blurRadius: 20,
-              offset: const Offset(0, 25),
-              spreadRadius: -25,
-            ),
-          ],
+      return GestureDetector(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfileScreen(pokemon: pokemon),
+          ),
         ),
-        child: Stack(
-          children: [
-            SizedBox(
-              height: _deviceHeight * 0.2,
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              left: 0,
-              child: _container(),
-            ),
-            Positioned(
-              right: _deviceWidth * -0.04,
-              bottom: _deviceHeight * -0.03, // -15,
-              child: _pokeball(),
-            ),
-            Positioned(
-              right: _deviceWidth * 0.025,
-              bottom: _deviceHeight * 0.008,
-              child: _image(),
-            ),
-            Positioned(
-              left: _deviceWidth * 0.215,
-              top: _deviceHeight * 0.038, //0.016
-              child: _pattern(),
-            ),
-          ],
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: pokemon.types.first.backgroundColor,
+                blurRadius: 20,
+                offset: const Offset(0, 25),
+                spreadRadius: -25,
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              SizedBox(
+                height: _deviceHeight * 0.2,
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                left: 0,
+                child: _container(),
+              ),
+              Positioned(
+                right: _deviceWidth * -0.04,
+                bottom: _deviceHeight * -0.03, // -15,
+                child: _pokeball(),
+              ),
+              Positioned(
+                right: _deviceWidth * 0.025,
+                bottom: _deviceHeight * 0.008,
+                child: _image(),
+              ),
+              Positioned(
+                left: _deviceWidth * 0.215,
+                top: _deviceHeight * 0.038, //0.016
+                child: _pattern(),
+              ),
+            ],
+          ),
         ),
       );
     }
 
     return Expanded(
       child: ListView.separated(
+        padding: EdgeInsets.symmetric(
+          vertical: _deviceHeight * 0.05,
+          horizontal: _deviceWidth * 0.05,
+        ),
         itemCount: pokemons.length,
         itemBuilder: (context, index) => _pokemonCard(pokemons[index]),
         separatorBuilder: (_, __) => SizedBox(height: _deviceHeight * 0.02),
@@ -282,33 +261,39 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: _deviceWidth * 0.1),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: _deviceHeight * 0.05),
-            const Text(
-              'Pokédex',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+      body: Column(
+        children: [
+          SizedBox(height: _deviceHeight * 0.02),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: _deviceWidth * 0.05,
+              vertical: _deviceHeight * 0.015,
             ),
-            SizedBox(height: _deviceHeight * 0.01),
-            Text(
-              'Search for Pokémon by name or using the National Pokédex number.',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 15,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Pokédex',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: _deviceHeight * 0.01),
+                Text(
+                  'Search for Pokémon by name or using the National Pokédex number.',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontSize: 16,
+                  ),
+                ),
+                SizedBox(height: _deviceHeight * 0.038),
+                _searchBar(),
+              ],
             ),
-            SizedBox(height: _deviceHeight * 0.038),
-            _searchBar(),
-            SizedBox(height: _deviceHeight * 0.05),
-            _pokemonList(),
-          ],
-        ),
+          ),
+          _pokemonList(),
+        ],
       ),
     );
   }
