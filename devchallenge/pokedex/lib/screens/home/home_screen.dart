@@ -3,11 +3,11 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pokedex/components/badge.dart';
-import 'package:pokedex/screens/profile_screen.dart';
+import 'package:pokedex/screens/profile/profile_screen.dart';
 
-import '../models/pokemon.dart';
-import '../utils/constants.dart';
-import '../utils/mocks.dart';
+import '../../models/pokemon.dart';
+import '../../utils/constants.dart';
+import '../../utils/mocks.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

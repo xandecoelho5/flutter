@@ -62,8 +62,20 @@ const pokemons = [
     minSpeed: 85,
     maxSpeed: 207,
     evolutions: [
-      Evolution(basePokemonId: 1, level: 16, nextPokemonId: 2),
-      Evolution(basePokemonId: 2, level: 32, nextPokemonId: 3),
+      Evolution(
+        basePokemonId: 1,
+        basePokemonName: 'Bulbasaur',
+        level: 16,
+        nextPokemonId: 2,
+        nextPokemonName: 'Ivysaur',
+      ),
+      Evolution(
+        basePokemonId: 2,
+        basePokemonName: 'Ivysaur',
+        level: 32,
+        nextPokemonId: 3,
+        nextPokemonName: 'Venusaur',
+      ),
     ],
   ),
   Pokemon(
@@ -122,8 +134,20 @@ const pokemons = [
     minSpeed: 121,
     maxSpeed: 251,
     evolutions: [
-      Evolution(basePokemonId: 4, level: 16, nextPokemonId: 5),
-      Evolution(basePokemonId: 5, level: 36, nextPokemonId: 6),
+      Evolution(
+        basePokemonId: 4,
+        basePokemonName: 'Charmander',
+        level: 16,
+        nextPokemonId: 5,
+        nextPokemonName: 'Charmeleon',
+      ),
+      Evolution(
+        basePokemonId: 5,
+        basePokemonName: 'Charmeleon',
+        level: 36,
+        nextPokemonId: 6,
+        nextPokemonName: 'Charizard',
+      ),
     ],
   ),
   Pokemon(
@@ -180,8 +204,20 @@ const pokemons = [
     minSpeed: 81,
     maxSpeed: 203,
     evolutions: [
-      Evolution(basePokemonId: 7, level: 16, nextPokemonId: 8),
-      Evolution(basePokemonId: 8, level: 32, nextPokemonId: 9),
+      Evolution(
+        basePokemonId: 7,
+        basePokemonName: 'Squirtle',
+        level: 16,
+        nextPokemonId: 8,
+        nextPokemonName: 'Wartortle',
+      ),
+      Evolution(
+        basePokemonId: 8,
+        basePokemonName: 'Wartotle',
+        level: 32,
+        nextPokemonId: 9,
+        nextPokemonName: 'Blastoise',
+      ),
     ],
   ),
 ];

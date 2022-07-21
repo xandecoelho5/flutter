@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/screens/home_screen.dart';
+import 'package:pokedex/screens/home/home_screen.dart';
 import 'package:pokedex/utils/constants.dart';
 
 void main() {

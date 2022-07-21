@@ -33,9 +33,24 @@ enum PokemonTypes {
   final Color foregroundColor;
   final Color backgroundColor;
 
-  // final List<DamageRelation> damageRelations;
+  static double getEffectiveness(
+    List<PokemonTypes> types,
+    PokemonTypes attackingType,
+  ) {
+    double effectiveness = 1.0;
+    final damageRelations = _getDamageRelations(attackingType);
+    for (var type in types) {
+      for (var damageRelation in damageRelations) {
+        if (damageRelation.type == type) {
+          effectiveness *= damageRelation.damage;
+        }
+      }
+    }
 
-  List<DamageRelation> getDamageRelations(PokemonTypes type) {
+    return effectiveness;
+  }
+
+  static List<DamageRelation> _getDamageRelations(PokemonTypes type) {
     const halfDamage = 0.5;
     const doubleDamage = 2.0;
     const noDamage = 0.0;
