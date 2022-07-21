@@ -71,9 +71,24 @@ class _ProfileEvolutionComponentState extends State<ProfileEvolutionComponent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _pokemonColumn(evolution.basePokemonId, evolution.basePokemonName),
-        _evolutionFactor(),
-        _pokemonColumn(evolution.nextPokemonId, evolution.nextPokemonName),
+        Expanded(
+          flex: 3,
+          child: _pokemonColumn(
+            evolution.basePokemonId,
+            evolution.basePokemonName,
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: _evolutionFactor(),
+        ),
+        Expanded(
+          flex: 3,
+          child: _pokemonColumn(
+            evolution.nextPokemonId,
+            evolution.nextPokemonName,
+          ),
+        ),
       ],
     );
   }

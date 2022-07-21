@@ -155,7 +155,7 @@ const pokemons = [
     name: 'Squirtle',
     imageUrl:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
-    types: [PokemonTypes.grass, PokemonTypes.poison],
+    types: [PokemonTypes.water],
     description:
         'Squirtle\'s shell is not merely used for protection. The shell\'s rounded shape and the grooves on its surface help minimize resistance in water, enabling this Pokémon to swim at high speeds.',
     species: 'Tiny Turtle Pokémon',

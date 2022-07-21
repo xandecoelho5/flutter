@@ -20,11 +20,10 @@ class ProfileHeaderComponent extends StatefulWidget {
 
 class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
   late double _deviceWidth;
-  late double _deviceHeight;
 
   _info() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -35,14 +34,17 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
             fontSize: 16,
           ),
         ),
-        Text(
-          widget.pokemon.name,
-          style: const TextStyle(
-            color: kTextWhite,
-            fontWeight: FontWeight.w700,
-            fontSize: 32,
+        FittedBox(
+          child: Text(
+            widget.pokemon.name,
+            style: const TextStyle(
+              color: kTextWhite,
+              fontWeight: FontWeight.w700,
+              fontSize: 32,
+            ),
           ),
         ),
+        const SizedBox(height: 4),
         Row(
           children: widget.pokemon.types.map((type) => Badge(type)).toList(),
         ),
@@ -129,8 +131,8 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
       colors: kGradientVector,
       child: SvgPicture.asset(
         'assets/patterns/10x5.svg',
-        width: 65,
-        height: 70,
+        width: 140,
+        height: 65,
       ),
     );
   }
@@ -138,34 +140,32 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
   @override
   Widget build(BuildContext context) {
     _deviceWidth = MediaQuery.of(context).size.width;
-    _deviceHeight = MediaQuery.of(context).size.height;
 
     return Padding(
       padding: const EdgeInsets.only(top: 25),
       child: Stack(
+        alignment: Alignment.center,
         children: [
-          SizedBox(height: _deviceHeight * 0.283),
           Positioned(
-            top: 0,
-            left: -90,
+            top: -8,
             child: _pokemonName(),
           ),
           Positioned(
-            bottom: 5,
-            right: -82,
+            bottom: -10,
+            right: -75,
             child: _pattern(),
           ),
           Padding(
             padding: EdgeInsets.only(
-              top: _deviceHeight * 0.08,
+              top: 40,
               left: _deviceWidth * 0.1,
               right: _deviceWidth * 0.17,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _image(),
-                _info(),
+                Expanded(child: _image(), flex: 5),
+                Expanded(child: _info(), flex: 5),
               ],
             ),
           ),
