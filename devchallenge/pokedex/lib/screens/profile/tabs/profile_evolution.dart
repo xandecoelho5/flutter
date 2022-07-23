@@ -42,7 +42,7 @@ class _ProfileEvolutionComponentState extends State<ProfileEvolutionComponent> {
             name,
             style: const TextStyle(
               color: kTextBlack,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
             textAlign: TextAlign.center,
@@ -59,7 +59,7 @@ class _ProfileEvolutionComponentState extends State<ProfileEvolutionComponent> {
             '(Level ${evolution.level})',
             style: const TextStyle(
               color: kTextBlack,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: 12,
             ),
             textAlign: TextAlign.center,
@@ -118,8 +118,8 @@ class _ProfileEvolutionComponentState extends State<ProfileEvolutionComponent> {
         Text(
           'Evolution Chain',
           style: TextStyle(
-            color: widget.pokemon.types.first.foregroundColor,
-            fontWeight: FontWeight.w700,
+            color: widget.pokemon.types.first.color,
+            fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
         ),

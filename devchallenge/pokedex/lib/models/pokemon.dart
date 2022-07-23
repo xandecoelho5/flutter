@@ -1,6 +1,6 @@
 import 'package:pokedex/models/evolution.dart';
 import 'package:pokedex/models/location.dart';
-import 'package:pokedex/models/pokemon_types.dart';
+import 'package:pokedex/models/pokemon_type.dart';
 
 import 'ability.dart';
 
@@ -8,7 +8,7 @@ class Pokemon {
   final int pokedexNumber;
   final String name;
   final String imageUrl;
-  final List<PokemonTypes> types;
+  final List<PokemonType> types;
 
   // Pokédex Data
   final String description;
@@ -16,7 +16,7 @@ class Pokemon {
   final double height;
   final double weight;
   final List<Ability> abilities;
-  final List<PokemonTypes> weaknesses;
+  final List<PokemonType> weaknesses;
 
   // Training
   final String evYield;

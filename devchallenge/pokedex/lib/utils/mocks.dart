@@ -3,7 +3,7 @@ import 'package:pokedex/models/evolution.dart';
 import 'package:pokedex/models/location.dart';
 import 'package:pokedex/models/pokemon.dart';
 
-import '../models/pokemon_types.dart';
+import '../models/pokemon_type.dart';
 
 const pokemons = [
   Pokemon(
@@ -11,7 +11,7 @@ const pokemons = [
     name: 'Bulbasaur',
     imageUrl:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-    types: [PokemonTypes.grass, PokemonTypes.poison],
+    types: [PokemonType.grass, PokemonType.poison],
     description:
         'Bulbasaur can be seen napping in bright sunlight. There is a seed on its back. By soaking up the sun\'s rays, the seed grows progressively larger.',
     species: 'Seed Pokémon',
@@ -22,10 +22,10 @@ const pokemons = [
       Ability(slot: 3, name: 'Chlorophyll', isHidden: true),
     ],
     weaknesses: [
-      PokemonTypes.fire,
-      PokemonTypes.flying,
-      PokemonTypes.ice,
-      PokemonTypes.psychic,
+      PokemonType.fire,
+      PokemonType.flying,
+      PokemonType.ice,
+      PokemonType.psychic,
     ],
     evYield: '1 Special Attack',
     catchRate: '45 (5.9% with PokéBall, full HP)',
@@ -83,7 +83,7 @@ const pokemons = [
     name: 'Charmander',
     imageUrl:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
-    types: [PokemonTypes.fire],
+    types: [PokemonType.fire],
     description:
         'The flame that burns at the tip of its tail is an indication of its emotions. The flame wavers when Charmander is enjoying itself. If the Pokémon becomes enraged, the flame burns fiercely.',
     species: 'Lizard Pokémon',
@@ -94,9 +94,9 @@ const pokemons = [
       Ability(slot: 3, name: 'Solar Power', isHidden: true),
     ],
     weaknesses: [
-      PokemonTypes.ground,
-      PokemonTypes.rock,
-      PokemonTypes.water,
+      PokemonType.ground,
+      PokemonType.rock,
+      PokemonType.water,
     ],
     evYield: '1 Speed',
     catchRate: '45 (5.9% with PokéBall, full HP)',
@@ -155,7 +155,7 @@ const pokemons = [
     name: 'Squirtle',
     imageUrl:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png',
-    types: [PokemonTypes.water],
+    types: [PokemonType.water],
     description:
         'Squirtle\'s shell is not merely used for protection. The shell\'s rounded shape and the grooves on its surface help minimize resistance in water, enabling this Pokémon to swim at high speeds.',
     species: 'Tiny Turtle Pokémon',
@@ -166,8 +166,8 @@ const pokemons = [
       Ability(slot: 3, name: 'Rain Dish', isHidden: true),
     ],
     weaknesses: [
-      PokemonTypes.electric,
-      PokemonTypes.grass,
+      PokemonType.electric,
+      PokemonType.grass,
     ],
     evYield: '1 Defense',
     catchRate: '45 (5.9% with PokéBall, full HP)',

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../models/pokemon_types.dart';
+import '../models/pokemon_type.dart';
 
 class Badge extends StatelessWidget {
   const Badge(
@@ -11,7 +11,7 @@ class Badge extends StatelessWidget {
     this.margin,
   }) : super(key: key);
 
-  final PokemonTypes type;
+  final PokemonType type;
   final bool onlyIcon;
   final double? margin;
 
@@ -24,7 +24,7 @@ class Badge extends StatelessWidget {
       margin: EdgeInsets.only(right: margin ?? 7),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(3),
-        color: type.foregroundColor,
+        color: type.color,
       ),
       child: Row(
         children: [

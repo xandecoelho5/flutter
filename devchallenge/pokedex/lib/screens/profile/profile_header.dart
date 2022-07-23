@@ -30,7 +30,7 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
           '#${widget.pokemon.pokedexNumber.toString().padLeft(3, '0')}',
           style: TextStyle(
             color: kTextNumberDarker,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
         ),
@@ -39,7 +39,7 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
             widget.pokemon.name,
             style: const TextStyle(
               color: kTextWhite,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               fontSize: 32,
             ),
           ),
@@ -108,7 +108,7 @@ class _ProfileHeaderComponentState extends State<ProfileHeaderComponent> {
       child: Text(
         widget.pokemon.name.toUpperCase(),
         style: TextStyle(
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.bold,
           fontSize: 100,
           foreground: Paint()
             ..style = PaintingStyle.stroke

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon.dart';
 
 import '../../../components/badge.dart';
-import '../../../models/pokemon_types.dart';
+import '../../../models/pokemon_type.dart';
 import '../../../utils/constants.dart';
 
 class ProfileStatsComponent extends StatefulWidget {
@@ -26,8 +26,8 @@ class _ProfileStatsComponentState extends State<ProfileStatsComponent> {
     return Text(
       title,
       style: TextStyle(
-        color: widget.pokemon.types.first.foregroundColor,
-        fontWeight: FontWeight.w700,
+        color: widget.pokemon.types.first.color,
+        fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
     );
@@ -47,7 +47,7 @@ class _ProfileStatsComponentState extends State<ProfileStatsComponent> {
               height: 4,
               width: 140 * (base / ((max + min) / 2)),
               decoration: BoxDecoration(
-                color: widget.pokemon.types.first.foregroundColor,
+                color: widget.pokemon.types.first.color,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -241,17 +241,17 @@ class _ProfileStatsComponentState extends State<ProfileStatsComponent> {
             mainAxisExtent: 60,
             crossAxisSpacing: _deviceWidth * 0.02,
           ),
-          itemCount: PokemonTypes.values.length,
+          itemCount: PokemonType.values.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            final type = PokemonTypes.values[index];
+            final type = PokemonType.values[index];
             return Column(
               children: [
                 Badge(type, onlyIcon: true, margin: 0),
                 const SizedBox(height: 5),
                 Text(
                   _textByEffectiveness(
-                    PokemonTypes.getEffectiveness(widget.pokemon.types, type),
+                    PokemonType.getEffectiveness(widget.pokemon.types, type),
                   ),
                   style: kContentStyle,
                 ),

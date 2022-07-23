@@ -51,8 +51,8 @@ class _ProfileAboutComponentState extends State<ProfileAboutComponent> {
     return Text(
       title,
       style: TextStyle(
-        color: widget.pokemon.types.first.foregroundColor,
-        fontWeight: FontWeight.w700,
+        color: widget.pokemon.types.first.color,
+        fontWeight: FontWeight.bold,
         fontSize: 16,
       ),
     );

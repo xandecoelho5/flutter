@@ -1,13 +1,10 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pokedex/components/badge.dart';
-import 'package:pokedex/screens/profile/profile_screen.dart';
+import 'package:pokedex/components/sort_modal.dart';
+import 'package:pokedex/screens/home/pokemon_list.dart';
 
-import '../../models/pokemon.dart';
+import '../../components/filter_modal.dart';
 import '../../utils/constants.dart';
-import '../../utils/mocks.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,10 +34,21 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => FocusScope.of(context).requestFocus(_searchFocusNode));
   }
 
+  void _showModal(modal) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      constraints: BoxConstraints(
+        minHeight: _deviceHeight * 0.8,
+      ),
+      builder: (context) => modal,
+    );
+  }
+
   _appBar() {
-    _svgIcon(assetName) {
+    _svgIcon(assetName, onTap) {
       return InkWell(
-        onTap: () {},
+        onTap: onTap,
         child: SvgPicture.asset(
           'assets/icons/$assetName',
           color: Colors.black,
@@ -50,11 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return AppBar(
       actions: [
-        _svgIcon('generation.svg'),
+        _svgIcon('generation.svg', () {}),
         SizedBox(width: _deviceWidth * 0.05),
-        _svgIcon('sort.svg'),
+        _svgIcon('sort.svg', () => _showModal(const SortModal())),
         SizedBox(width: _deviceWidth * 0.05),
-        _svgIcon('filter.svg'),
+        _svgIcon('filter.svg', () => _showModal(const FilterModal())),
         SizedBox(width: _deviceWidth * 0.1),
       ],
       backgroundColor: Colors.transparent,
@@ -90,166 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       style: const TextStyle(color: kTextBlack),
-    );
-  }
-
-  _pokemonList() {
-    // TODO align correctly the pokemon type inside the container
-    _pokemonCard(Pokemon pokemon) {
-      _info() {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '#${pokemon.pokedexNumber.toString().padLeft(3, '0')}',
-              style: TextStyle(
-                color: kTextNumber,
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-            Text(
-              pokemon.name,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 26,
-              ),
-            ),
-            Row(
-              children: pokemon.types.map((type) => Badge(type)).toList(),
-            ),
-          ],
-        );
-      }
-
-      _image() {
-        return Image.network(
-          pokemon.imageUrl,
-          fit: BoxFit.cover,
-          height: _deviceHeight * 0.2,
-        );
-      }
-
-      _pattern() {
-        return ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (Rect bounds) {
-            return ui.Gradient.linear(
-              const Offset(0.0, 35.0),
-              const Offset(0.0, 0.0),
-              [
-                Colors.white.withOpacity(0.0),
-                Colors.white.withOpacity(0.25),
-              ],
-            );
-          },
-          child: SvgPicture.asset(
-            'assets/patterns/6x3.svg',
-            fit: BoxFit.contain,
-            height: _deviceHeight * 0.048,
-          ),
-        );
-      }
-
-      _pokeball() {
-        return ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (Rect bounds) {
-            return ui.Gradient.linear(
-              const Offset(200.0, 0.0),
-              const Offset(200.0, 130.0),
-              [
-                Colors.white.withOpacity(0.25),
-                Colors.white.withOpacity(0.0),
-              ],
-            );
-          },
-          child: SvgPicture.asset(
-            'assets/patterns/pokeball.svg',
-            fit: BoxFit.contain,
-            height: _deviceHeight * 0.22,
-          ),
-        );
-      }
-
-      _container() {
-        return Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: _deviceWidth * 0.05,
-            vertical: _deviceHeight * 0.02,
-          ),
-          height: _deviceHeight * 0.17,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: pokemon.types.first.backgroundColor,
-          ),
-          child: _info(),
-        );
-      }
-
-      return GestureDetector(
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProfileScreen(pokemon: pokemon),
-          ),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: pokemon.types.first.backgroundColor,
-                blurRadius: 20,
-                offset: const Offset(0, 25),
-                spreadRadius: -25,
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              SizedBox(
-                height: _deviceHeight * 0.2,
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: _container(),
-              ),
-              Positioned(
-                right: _deviceWidth * -0.04,
-                bottom: _deviceHeight * -0.03, // -15,
-                child: _pokeball(),
-              ),
-              Positioned(
-                right: _deviceWidth * 0.025,
-                bottom: _deviceHeight * 0.008,
-                child: _image(),
-              ),
-              Positioned(
-                left: _deviceWidth * 0.215,
-                top: _deviceHeight * 0.038, //0.016
-                child: _pattern(),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return Expanded(
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(
-          vertical: _deviceHeight * 0.05,
-          horizontal: _deviceWidth * 0.05,
-        ),
-        itemCount: pokemons.length,
-        itemBuilder: (context, index) => _pokemonCard(pokemons[index]),
-        separatorBuilder: (_, __) => SizedBox(height: _deviceHeight * 0.02),
-      ),
     );
   }
 
@@ -292,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          _pokemonList(),
+          const PokemonListComponent(),
         ],
       ),
     );

@@ -46,6 +46,6 @@ const kContentStyle = TextStyle(color: kTextGrey, fontSize: 16);
 
 // TODO remove spacer from files and use this instead
 // Spacers
-const kSpacerSmall = SizedBox(height: 8);
-const kSpacerMedium = SizedBox(height: 16);
-const kSpacerLarge = SizedBox(height: 24);
+const kSpacerSmall = SizedBox(height: 12.0);
+const kSpacerMedium = SizedBox(height: 24.0);
+const kSpacerLarge = SizedBox(height: 36.0);

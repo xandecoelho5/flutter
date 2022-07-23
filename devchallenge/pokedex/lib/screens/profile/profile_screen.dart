@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       labelStyle: const TextStyle(
         color: kTextWhite,
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.bold,
       ),
       indicator: const BoxDecoration(
         image: DecorationImage(
@@ -115,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: const TextStyle(
                 color: kTextWhite,
                 fontSize: 26,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
