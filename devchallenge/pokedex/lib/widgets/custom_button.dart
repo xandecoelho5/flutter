@@ -22,16 +22,17 @@ class CustomButton extends StatelessWidget {
     );
 
     return Container(
+      height: 60,
       decoration: selected ? decoration : null,
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          primary: selected ? kTypePsychic : const Color(0xFFF2F2F2),
+          primary: selected ? kTypePsychic : kBackgroundDefaultInput,
           onPrimary: selected ? kTextWhite : kTextGrey,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20.5),
           elevation: 0,
         ),
         child: Text(text, style: const TextStyle(fontSize: 16)),

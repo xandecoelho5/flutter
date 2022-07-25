@@ -37,7 +37,7 @@ class _SyncfusionSliderState extends State<SyncfusionSlider> {
 
     return SfRangeSliderTheme(
       data: SfRangeSliderThemeData(
-        inactiveTrackColor: const Color(0xFFF2F2F2),
+        inactiveTrackColor: kBackgroundDefaultInput,
         thumbColor: Colors.white,
         thumbStrokeColor: kTypePsychic,
         thumbStrokeWidth: 5,

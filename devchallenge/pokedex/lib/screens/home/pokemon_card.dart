@@ -54,8 +54,9 @@ class _PokemonCardComponentState extends State<PokemonCardComponent> {
   _image() {
     return Image.network(
       widget.pokemon.imageUrl,
-      fit: BoxFit.cover,
+      fit: BoxFit.contain,
       height: _deviceHeight * 0.2,
+      width: _deviceWidth * 0.4,
     );
   }
 
@@ -74,8 +75,8 @@ class _PokemonCardComponentState extends State<PokemonCardComponent> {
       },
       child: SvgPicture.asset(
         'assets/patterns/6x3.svg',
-        fit: BoxFit.contain,
-        height: _deviceHeight * 0.048,
+        height: 32,
+        width: 74,
       ),
     );
   }
@@ -95,8 +96,8 @@ class _PokemonCardComponentState extends State<PokemonCardComponent> {
       },
       child: SvgPicture.asset(
         'assets/patterns/pokeball.svg',
-        fit: BoxFit.contain,
         height: _deviceHeight * 0.22,
+        width: _deviceWidth * 0.4,
       ),
     );
   }

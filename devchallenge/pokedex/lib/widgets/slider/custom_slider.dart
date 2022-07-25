@@ -19,7 +19,7 @@ class _CustomSliderState extends State<CustomSlider> {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         activeTrackColor: kTypePsychic,
-        inactiveTrackColor: const Color(0xFFF2F2F2),
+        inactiveTrackColor: kBackgroundDefaultInput,
         trackHeight: 4,
         rangeTrackShape: const RoundedRectRangeSliderTrackShape(),
         trackShape: const RoundedRectSliderTrackShape(),

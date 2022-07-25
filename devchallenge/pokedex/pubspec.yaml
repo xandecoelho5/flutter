@@ -19,6 +19,8 @@ dependencies:
   syncfusion_flutter_sliders: ^20.2.39
   syncfusion_flutter_core: ^20.2.39
   intl: ^0.17.0
+  numerus: ^2.0.0
+  flutter_bloc: ^8.0.1
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +35,13 @@ flutter:
   assets:
     - assets/icons/
     - assets/generations/generation1/
+    - assets/generations/generation2/
+    - assets/generations/generation3/
+    - assets/generations/generation4/
+    - assets/generations/generation5/
+    - assets/generations/generation6/
+    - assets/generations/generation7/
+    - assets/generations/generation8/
     - assets/types/
     - assets/weights/
     - assets/heights/

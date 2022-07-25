@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pokedex/screens/home/home_screen.dart';
 import 'package:pokedex/utils/constants.dart';
 import 'package:pokedex/widgets/custom_scroll_behavior.dart';
@@ -12,6 +13,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     return MaterialApp(
       title: 'Pokédex',
       home: const HomeScreen(),

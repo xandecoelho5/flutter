@@ -30,8 +30,6 @@ class TypeIcon extends StatelessWidget {
       child: SvgPicture.asset(
         'assets/${type.assetsFolder}/${type.fileName}.svg',
         color: selected ? Colors.white : type.color,
-        height: 25,
-        width: 25,
         fit: BoxFit.scaleDown,
       ),
     );

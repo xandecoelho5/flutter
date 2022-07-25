@@ -1,9 +1,12 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pokedex/components/sort_modal.dart';
+import 'package:pokedex/components/generations_modal.dart';
 import 'package:pokedex/screens/home/pokemon_list.dart';
 
 import '../../components/filter_modal.dart';
+import '../../components/sort_modal.dart';
 import '../../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -39,8 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       constraints: BoxConstraints(
-        minHeight: _deviceHeight * 0.8,
+        minHeight: _deviceHeight * 0.1,
+        maxHeight: _deviceHeight * 0.48,
       ),
+      isScrollControlled: true,
       builder: (context) => modal,
     );
   }
@@ -58,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return AppBar(
       actions: [
-        _svgIcon('generation.svg', () {}),
+        _svgIcon('generation.svg', () => _showModal(const GenerationsModal())),
         SizedBox(width: _deviceWidth * 0.05),
         _svgIcon('sort.svg', () => _showModal(const SortModal())),
         SizedBox(width: _deviceWidth * 0.05),
@@ -67,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       backgroundColor: Colors.transparent,
       elevation: 0,
-      toolbarHeight: 30,
+      toolbarHeight: _deviceHeight * 0.1,
     );
   }
 
@@ -101,6 +106,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  _pokeball() {
+    return ShaderMask(
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (Rect bounds) {
+        return ui.Gradient.linear(
+          bounds.center,
+          bounds.bottomCenter,
+          kGradientPokeball,
+        );
+      },
+      child: SvgPicture.asset(
+        'assets/patterns/pokeball.svg',
+        height: _deviceWidth,
+        width: _deviceWidth,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
@@ -109,40 +132,49 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: _appBar(),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: _deviceHeight * 0.02),
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: _deviceWidth * 0.05,
-              vertical: _deviceHeight * 0.015,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Pokédex',
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: _deviceHeight * 0.01),
-                Text(
-                  'Search for Pokémon by name or using the National Pokédex number.',
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 16,
-                  ),
-                ),
-                SizedBox(height: _deviceHeight * 0.038),
-                _searchBar(),
-              ],
-            ),
+          Positioned(
+            top: _deviceWidth * -0.5,
+            child: _pokeball(),
           ),
-          const PokemonListComponent(),
+          Column(
+            children: [
+              kSpacerSmall,
+              Padding(
+                padding: EdgeInsets.only(
+                  right: kLargePadding,
+                  left: kLargePadding,
+                  top: _deviceHeight * 0.1,
+                  bottom: _deviceHeight * 0.015,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Pokédex',
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: _deviceHeight * 0.01),
+                    Text(
+                      'Search for Pokémon by name or using the National Pokédex number.',
+                      style:
+                          TextStyle(color: Colors.grey.shade600, fontSize: 16),
+                    ),
+                    SizedBox(height: _deviceHeight * 0.038),
+                    _searchBar(),
+                  ],
+                ),
+              ),
+              const PokemonListComponent(),
+            ],
+          ),
         ],
       ),
+      extendBodyBehindAppBar: true,
     );
   }
 }

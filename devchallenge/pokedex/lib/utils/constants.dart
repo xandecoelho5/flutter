@@ -24,7 +24,7 @@ const kLightGrey = Color(0xFFF5F5F5);
 final kGradientVector = [kWhiteThirtyOpacity, kWhiteNoOpacity];
 final kGradientVectorWhite = kGradientVector;
 final kGradientPokemonName = kGradientVector;
-final kGradientPokeball = [kLightGrey, Colors.white];
+final kGradientPokeball = [kLightGrey.withOpacity(0.5), Colors.white];
 final kGradientPokeballGrey = [const Color(0xFFECECEC), kLightGrey];
 final kGradientPokeballWhite = [kWhiteTenOpacity, kWhiteNoOpacity];
 final kGradientPokemonCircle = [kWhiteNoOpacity, kWhiteThirtyFiveOpacity];
@@ -47,5 +47,9 @@ const kContentStyle = TextStyle(color: kTextGrey, fontSize: 16);
 // TODO remove spacer from files and use this instead
 // Spacers
 const kSpacerSmall = SizedBox(height: 12.0);
-const kSpacerMedium = SizedBox(height: 24.0);
+const kSpacerMedium = SizedBox(height: 20.0);
 const kSpacerLarge = SizedBox(height: 36.0);
+
+const kSmallPadding = 12.0;
+const kMediumPadding = 20.0;
+const kLargePadding = 36.0;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/screens/home/pokemon_card.dart';
+import 'package:pokedex/utils/constants.dart';
 
 import '../../utils/mocks.dart';
 
@@ -10,9 +11,9 @@ class PokemonListComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.separated(
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).size.height * 0.05,
-          horizontal: MediaQuery.of(context).size.width * 0.05,
+        padding: const EdgeInsets.symmetric(
+          vertical: kMediumPadding,
+          horizontal: kLargePadding,
         ),
         itemCount: pokemons.length,
         itemBuilder: (context, index) => PokemonCardComponent(
