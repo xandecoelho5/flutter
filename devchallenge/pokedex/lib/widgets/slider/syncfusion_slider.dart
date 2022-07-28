@@ -6,7 +6,14 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import '../../utils/constants.dart';
 
 class SyncfusionSlider extends StatefulWidget {
-  const SyncfusionSlider({Key? key}) : super(key: key);
+  const SyncfusionSlider({
+    Key? key,
+    required this.rangeValues,
+    required this.onChangeEnd,
+  }) : super(key: key);
+
+  final RangeValues rangeValues;
+  final Function(SfRangeValues) onChangeEnd;
 
   @override
   State<SyncfusionSlider> createState() => _SyncfusionSliderState();
@@ -16,7 +23,10 @@ const min = 1;
 const max = 898;
 
 class _SyncfusionSliderState extends State<SyncfusionSlider> {
-  SfRangeValues _values = const SfRangeValues(min, max);
+  late SfRangeValues _values = SfRangeValues(
+    widget.rangeValues.start,
+    widget.rangeValues.end,
+  );
 
   _calculateWidth(values, width) {
     final div = values / max;
@@ -59,6 +69,7 @@ class _SyncfusionSliderState extends State<SyncfusionSlider> {
                 _values = values;
               });
             },
+            onChangeEnd: widget.onChangeEnd,
           ),
           Stack(
             children: [

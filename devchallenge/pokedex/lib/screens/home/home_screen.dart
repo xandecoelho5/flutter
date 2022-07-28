@@ -1,12 +1,18 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokedex/blocs/filter/filter_cubit.dart';
 import 'package:pokedex/components/generations_modal.dart';
+import 'package:pokedex/models/filter/filter.dart';
+import 'package:pokedex/models/sort/sort.dart';
 import 'package:pokedex/screens/home/pokemon_list.dart';
+import 'package:pokedex/utils/mocks.dart';
 
 import '../../components/filter_modal.dart';
 import '../../components/sort_modal.dart';
+import '../../models/pokemon.dart';
 import '../../utils/constants.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,11 +26,20 @@ class _HomeScreenState extends State<HomeScreen> {
   late double _deviceWidth;
   late double _deviceHeight;
   late final FocusNode _searchFocusNode;
+  int? _sortIndexSelected = 0;
+  int? _generationIndexSelected = 0;
+  late List<Pokemon> pokemonsBase;
+  late List<Pokemon> pokemonsFiltered;
+
+  var pokemonSort = const Sort();
+  var pokemonFilter = const Filter();
 
   @override
   void initState() {
     super.initState();
     _searchFocusNode = FocusNode();
+    pokemonsBase = pokemonsMock;
+    pokemonsFiltered = pokemonsBase;
   }
 
   @override
@@ -61,13 +76,65 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
+    _onSortChanged(value, sortOptions) {
+      setState(() => _sortIndexSelected = value);
+      pokemonSort = pokemonSort.copyWith(sortBy: sortOptions);
+      context.read<FilterCubit>().executeSorting(
+        [...pokemonsFiltered],
+        pokemonSort,
+      );
+    }
+
+    _onGenerationChanged(value, generationOptions) {
+      setState(() => _generationIndexSelected = value);
+      pokemonFilter = pokemonFilter.copyWith(generation: generationOptions);
+      context.read<FilterCubit>().executeFiltering(
+        [...pokemonsBase],
+        pokemonFilter,
+        pokemonSort,
+      );
+    }
+
+    _onApplyFilters(filter) {
+      setState(() => pokemonFilter = filter);
+      context.read<FilterCubit>().executeFiltering(
+        [...pokemonsBase],
+        pokemonFilter,
+        pokemonSort,
+      );
+    }
+
     return AppBar(
       actions: [
-        _svgIcon('generation.svg', () => _showModal(const GenerationsModal())),
+        _svgIcon(
+          'generation.svg',
+          () => _showModal(
+            GenerationsModal(
+              currentIndex: _generationIndexSelected,
+              onGenerationChanged: _onGenerationChanged,
+            ),
+          ),
+        ),
         SizedBox(width: _deviceWidth * 0.05),
-        _svgIcon('sort.svg', () => _showModal(const SortModal())),
+        _svgIcon(
+          'sort.svg',
+          () => _showModal(
+            SortModal(
+              currentIndex: _sortIndexSelected,
+              onSortChanged: _onSortChanged,
+            ),
+          ),
+        ),
         SizedBox(width: _deviceWidth * 0.05),
-        _svgIcon('filter.svg', () => _showModal(const FilterModal())),
+        _svgIcon(
+          'filter.svg',
+          () => _showModal(
+            FilterModal(
+              filter: pokemonFilter,
+              onApply: _onApplyFilters,
+            ),
+          ),
+        ),
         SizedBox(width: _deviceWidth * 0.1),
       ],
       backgroundColor: Colors.transparent,
@@ -169,7 +236,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              const PokemonListComponent(),
+              BlocBuilder<FilterCubit, FilterState>(
+                bloc: context.watch<FilterCubit>(),
+                builder: (context, state) {
+                  if (state is FilterLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state is FilterComplete) {
+                    final pokemons = state.pokemons;
+                    pokemonsFiltered = pokemons;
+                    return PokemonListComponent(pokemons: pokemonsFiltered);
+                  }
+
+                  return PokemonListComponent(pokemons: pokemonsBase);
+                },
+              ),
             ],
           ),
         ],

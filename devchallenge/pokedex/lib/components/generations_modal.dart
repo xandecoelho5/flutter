@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/components/generation_card.dart';
+import 'package:pokedex/models/filter/generations_options.dart';
 
 import '../utils/constants.dart';
 import '../widgets/custom_draggable_scrollable_sheet.dart';
@@ -15,8 +16,22 @@ const generations = [
   ['810', '813', '816'],
 ];
 
-class GenerationsModal extends StatelessWidget {
-  const GenerationsModal({Key? key}) : super(key: key);
+class GenerationsModal extends StatefulWidget {
+  const GenerationsModal({
+    Key? key,
+    required this.currentIndex,
+    required this.onGenerationChanged,
+  }) : super(key: key);
+
+  final Function(int?, GenerationOptions) onGenerationChanged;
+  final int? currentIndex;
+
+  @override
+  State<GenerationsModal> createState() => _GenerationsModalState();
+}
+
+class _GenerationsModalState extends State<GenerationsModal> {
+  late int? _value = widget.currentIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +57,18 @@ class GenerationsModal extends StatelessWidget {
               return GenerationCard(
                 generation: index + 1,
                 numbers: generations[index],
-                selected: index % 2 == 0,
+                selected: _value == index,
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (_value != index) {
+                      _value = selected ? index : null;
+                      widget.onGenerationChanged(
+                        _value,
+                        GenerationOptions.values[index],
+                      );
+                    }
+                  });
+                },
               );
             }),
           ),

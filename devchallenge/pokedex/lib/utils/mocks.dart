@@ -1,11 +1,16 @@
+import 'package:flutter/material.dart';
 import 'package:pokedex/models/ability.dart';
 import 'package:pokedex/models/evolution.dart';
+import 'package:pokedex/models/filter/filter.dart';
+import 'package:pokedex/models/filter/generations_options.dart';
 import 'package:pokedex/models/location.dart';
 import 'package:pokedex/models/pokemon.dart';
+import 'package:pokedex/models/pokemon_height.dart';
 
 import '../models/pokemon_type.dart';
+import '../models/pokemon_weight.dart';
 
-const pokemons = [
+const pokemonsMock = [
   Pokemon(
     pokedexNumber: 1,
     name: 'Bulbasaur',
@@ -221,3 +226,12 @@ const pokemons = [
     ],
   ),
 ];
+
+const mockFilter = Filter(
+  heights: [PokemonHeight.medium],
+  generation: GenerationOptions.first,
+  numberRange: RangeValues(78, 687),
+  weights: [PokemonWeight.light, PokemonWeight.heavy],
+  types: [PokemonType.bug, PokemonType.fairy],
+  weaknesses: [PokemonType.dragon, PokemonType.fighting],
+);
