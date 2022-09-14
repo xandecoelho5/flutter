@@ -16,7 +16,7 @@ class Pokemon {
   final double height;
   final double weight;
   final List<Ability> abilities;
-  final List<PokemonType> weaknesses;
+  final List<PokemonType> weaknesses; // pegar os effectiveness com 2x ou +
 
   // Training
   final String evYield;
@@ -55,6 +55,7 @@ class Pokemon {
 
   // Evolution Chart
   final List<Evolution> evolutions;
+  final int evolutionChainId;
 
   const Pokemon({
     required this.pokedexNumber,
@@ -95,6 +96,7 @@ class Pokemon {
     required this.minSpeed,
     required this.maxSpeed,
     required this.evolutions,
+    required this.evolutionChainId,
   });
 
   int get totalStats =>

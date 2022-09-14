@@ -82,6 +82,7 @@ const pokemonsMock = [
         nextPokemonName: 'Venusaur',
       ),
     ],
+    evolutionChainId: 1,
   ),
   Pokemon(
     pokedexNumber: 4,
@@ -154,6 +155,7 @@ const pokemonsMock = [
         nextPokemonName: 'Charizard',
       ),
     ],
+    evolutionChainId: 2,
   ),
   Pokemon(
     pokedexNumber: 7,
@@ -224,6 +226,7 @@ const pokemonsMock = [
         nextPokemonName: 'Blastoise',
       ),
     ],
+    evolutionChainId: 3,
   ),
 ];
 

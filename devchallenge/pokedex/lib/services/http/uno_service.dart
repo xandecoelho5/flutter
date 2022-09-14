@@ -1,4 +1,4 @@
-import 'package:pokedex/services/i_http_service.dart';
+import 'package:pokedex/services/http/i_http_service.dart';
 import 'package:uno/uno.dart';
 
 class UnoService implements IHttpService {
