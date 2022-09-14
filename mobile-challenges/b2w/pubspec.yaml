@@ -1,0 +1,50 @@
+name: b2w
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  uno: ^1.0.1+3
+  get_it: ^7.2.0
+
+  cupertino_icons: ^1.0.2
+  flutter_widget_from_html: ^0.8.5
+  easy_refresh: ^3.0.4+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/images/drawable-hdpi/
+    - assets/images/drawable-mdpi/
+    - assets/images/drawable-xhdpi/
+    - assets/images/drawable-xxhdpi/
+    - assets/images/drawable-xxxhdpi/
+
+  fonts:
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico-Regular.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Bold.ttf
+        - asset: assets/fonts/Roboto-Light.ttf
+        - asset: assets/fonts/Roboto-Medium.ttf
+        - asset: assets/fonts/Roboto-Regular.ttf
