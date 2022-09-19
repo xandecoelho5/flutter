@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_perguntas/questao.dart';
 import 'package:projeto_perguntas/questionario.dart';
-import 'package:projeto_perguntas/resposta.dart';
 import 'package:projeto_perguntas/resultado.dart';
 
 void main() => runApp(const PerguntaApp());
@@ -68,13 +66,14 @@ class _PerguntaAppState extends State<PerguntaApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(title: const Text('Perguntas')),
         body: temPerguntaSelecionada
             ? Questionario(
-            perguntas: _perguntas,
-            perguntaSelecionada: _perguntaSelecionada,
-            quandoResponder: _responder)
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder)
             : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
