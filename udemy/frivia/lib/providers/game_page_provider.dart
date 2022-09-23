@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class GamePageProvider extends ChangeNotifier {
-  final Dio _dio = Dio();
+  final Dio _dio = Dio(BaseOptions(baseUrl: 'https://opentdb.com/api.php'));
   final int _maxQuestions = 10;
 
   List? questions;
@@ -13,7 +13,6 @@ class GamePageProvider extends ChangeNotifier {
   String difficulty;
 
   GamePageProvider({required this.context, required this.difficulty}) {
-    _dio.options.baseUrl = 'https://opentdb.com/api.php';
     _getQuestionsFromApi();
   }
 
@@ -24,11 +23,16 @@ class GamePageProvider extends ChangeNotifier {
       'difficulty': difficulty.toLowerCase(),
     });
     questions = response.data['results'];
+    print(questions);
     notifyListeners();
   }
 
   String getCurrentQuestionText() {
-    return questions![_currentQuestionCount]['question'];
+    final question = questions![_currentQuestionCount]['question'] as String;
+    return question
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#039;', "'")
+        .replaceAll('&eacute;', 'é');
   }
 
   void answerQuestion(String answer) async {
