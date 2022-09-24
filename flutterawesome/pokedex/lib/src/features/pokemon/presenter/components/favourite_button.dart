@@ -5,9 +5,11 @@ class FavouriteButton extends StatelessWidget {
   const FavouriteButton({
     Key? key,
     required this.isFavourite,
+    required this.onPressed,
   }) : super(key: key);
 
   final bool isFavourite;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class FavouriteButton extends StatelessWidget {
           ),
           elevation: 10,
         ),
-        onPressed: () {},
+        onPressed: onPressed,
         child: Text(
           isFavourite ? 'Remove from favourites' : 'Mark as favourite',
           style: TextStyle(

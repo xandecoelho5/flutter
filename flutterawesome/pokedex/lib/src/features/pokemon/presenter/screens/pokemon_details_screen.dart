@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokedex/src/core/utils/colors.dart';
 import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokedex/src/features/pokemon/domain/value_objects/base_stats.dart';
@@ -6,13 +8,19 @@ import 'package:pokedex/src/features/pokemon/presenter/components/favourite_butt
 
 import '../../../../core/utils/dimensions.dart';
 import '../../../../core/utils/utils.dart';
+import '../blocs/favourite_bloc.dart';
 
-class PokemonDetailsScreen extends StatelessWidget {
+class PokemonDetailsScreen extends StatefulWidget {
   const PokemonDetailsScreen({Key? key, required this.pokemon})
       : super(key: key);
 
   final PokemonEntity pokemon;
 
+  @override
+  State<PokemonDetailsScreen> createState() => _PokemonDetailsScreenState();
+}
+
+class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
   _pokemonContainer() {
     return Stack(
       children: [
@@ -31,7 +39,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    Utils.capitalize(pokemon.name),
+                    Utils.capitalize(widget.pokemon.name),
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w700,
@@ -39,13 +47,13 @@ class PokemonDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    pokemon.types.join(','),
+                    widget.pokemon.types.join(','),
                     style: const TextStyle(fontSize: 16, color: kTextColor),
                   ),
                 ],
               ),
               Text(
-                '#${pokemon.id.toString().padLeft(3, '0')}',
+                '#${widget.pokemon.id.toString().padLeft(3, '0')}',
                 style: const TextStyle(fontSize: 16, color: kTextColor),
               ),
             ],
@@ -64,7 +72,7 @@ class PokemonDetailsScreen extends StatelessWidget {
           bottom: 0,
           right: 0,
           child: Image.network(
-            pokemon.imageUrl,
+            widget.pokemon.imageUrl,
             width: 136,
             height: 125,
           ),
@@ -208,25 +216,39 @@ class PokemonDetailsScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              baseStatsItem(pokemon.baseStats.hp),
+              baseStatsItem(widget.pokemon.baseStats.hp),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.attack),
+              baseStatsItem(widget.pokemon.baseStats.attack),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.defense),
+              baseStatsItem(widget.pokemon.baseStats.defense),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.specialAttack, kYellowColor),
+              baseStatsItem(
+                  widget.pokemon.baseStats.specialAttack, kYellowColor),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.specialDefense, kYellowColor),
+              baseStatsItem(
+                  widget.pokemon.baseStats.specialDefense, kYellowColor),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.speed),
+              baseStatsItem(widget.pokemon.baseStats.speed),
               const SizedBox(height: 24),
-              baseStatsItem(pokemon.baseStats.averagePower),
+              baseStatsItem(widget.pokemon.baseStats.averagePower),
               const SizedBox(height: 15),
             ],
           ),
         )
       ],
     );
+  }
+
+  void onFavouriteButtonPressed() {
+    setState(() {
+      if (widget.pokemon.isFavourite) {
+        widget.pokemon.isFavourite = false;
+        Modular.get<FavouriteBloc>().add(RemoveFavouriteEvent(widget.pokemon));
+      } else {
+        widget.pokemon.isFavourite = true;
+        Modular.get<FavouriteBloc>().add(AddFavouriteEvent(widget.pokemon));
+      }
+    });
   }
 
   @override
@@ -241,17 +263,47 @@ class PokemonDetailsScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _pokemonContainer(),
-            _bmiContainer(),
-            const SizedBox(height: 8),
-            _baseStatsContainer(context),
-          ],
+        child: BlocListener<FavouriteBloc, FavouriteState>(
+          bloc: Modular.get<FavouriteBloc>(),
+          listener: (context, state) {
+            if (state is ErrorFavouriteState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+
+            if (state is SuccessFavouriteState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    widget.pokemon.isFavourite
+                        ? 'Added to favourites'
+                        : 'Removed from favourites',
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              Modular.to.pop();
+            }
+          },
+          child: Column(
+            children: [
+              _pokemonContainer(),
+              _bmiContainer(),
+              const SizedBox(height: 8),
+              _baseStatsContainer(context),
+            ],
+          ),
         ),
       ),
       backgroundColor: kBackgroundColor,
-      floatingActionButton: const FavouriteButton(isFavourite: true),
+      floatingActionButton: FavouriteButton(
+        isFavourite: widget.pokemon.isFavourite,
+        onPressed: onFavouriteButtonPressed,
+      ),
     );
   }
 }

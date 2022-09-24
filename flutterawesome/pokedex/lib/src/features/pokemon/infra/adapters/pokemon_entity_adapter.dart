@@ -7,7 +7,6 @@ class PokemonEntityAdapter {
   PokemonEntityAdapter._();
 
   static PokemonEntity fromMap(Map map) {
-    var x = map['weight'];
     return PokemonEntity(
       id: map['id'],
       name: map['name'],

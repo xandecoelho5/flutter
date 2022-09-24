@@ -18,7 +18,7 @@ class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (context, args) => const SplashScreen()),
-        ModuleRoute('/pokemon', module: PokemonModule()),
+        ModuleRoute('/pokemon/', module: PokemonModule()),
       ];
 }
 

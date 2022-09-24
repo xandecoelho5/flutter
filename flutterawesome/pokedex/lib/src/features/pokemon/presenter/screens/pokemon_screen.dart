@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_response_entity.dart';
+import 'package:pokedex/src/features/pokemon/presenter/blocs/favourite_bloc.dart';
 import 'package:pokedex/src/features/pokemon/presenter/blocs/pokemon_bloc.dart';
 import 'package:pokedex/src/features/pokemon/presenter/components/pokemon_grid_list.dart';
 
@@ -15,9 +16,14 @@ class PokemonScreen extends StatefulWidget {
   State<PokemonScreen> createState() => _PokemonScreenState();
 }
 
-class _PokemonScreenState extends State<PokemonScreen> {
+class _PokemonScreenState extends State<PokemonScreen> with CompleteStateMixin {
   final List<PokemonEntity> pokemonList = [];
-  var pokemonResponseEntity = PokemonResponseEntity(pokemons: []);
+  var pokemonResponseEntity = const PokemonResponseEntity(pokemons: []);
+
+  @override
+  void completeState() {
+    Modular.get<FavouriteBloc>().add(FetchFavouritesEvent());
+  }
 
   AppBar appBarTitle() {
     return AppBar(
@@ -50,6 +56,21 @@ class _PokemonScreenState extends State<PokemonScreen> {
   }
 
   AppBar appBar() {
+    CircleAvatar favouritesCount(int count) {
+      return CircleAvatar(
+        radius: 13,
+        backgroundColor: kPrimaryColor,
+        child: Text(
+          '$count',
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.white,
@@ -65,31 +86,26 @@ class _PokemonScreenState extends State<PokemonScreen> {
           unselectedLabelColor: kUnselectedTabColor,
           tabs: [
             const Tab(
-              child: Text(
-                'All Pokemons',
-                style: TextStyle(fontSize: 16),
-              ),
+              child: Text('All Pokemons', style: TextStyle(fontSize: 16)),
             ),
             Tab(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     'Favourites',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(width: 4),
-                  CircleAvatar(
-                    radius: 13,
-                    backgroundColor: kPrimaryColor,
-                    child: Text(
-                      '1',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                  const SizedBox(width: 4),
+                  BlocBuilder<FavouriteBloc, FavouriteState>(
+                    bloc: Modular.get<FavouriteBloc>(),
+                    builder: (context, state) {
+                      if (state is SuccessFavouriteState) {
+                        return favouritesCount(state.pokemons.length);
+                      }
+
+                      return favouritesCount(0);
+                    },
                   ),
                 ],
               ),
@@ -130,7 +146,24 @@ class _PokemonScreenState extends State<PokemonScreen> {
 
               return const Center(child: Text('Error'));
             }),
-        const Center(child: Text('Favourites')),
+        BlocBuilder(
+          bloc: Modular.get<FavouriteBloc>(),
+          builder: (context, state) {
+            if (state is InitialFavouriteState) {
+              return const Center(child: Text('No favourites yet'));
+            }
+
+            if (state is LoadingFavouriteState) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state is SuccessFavouriteState) {
+              return PokemonGridList(pokemons: state.pokemons);
+            }
+
+            return const Center(child: Text('Error'));
+          },
+        ),
       ],
     );
   }
@@ -149,5 +182,17 @@ class _PokemonScreenState extends State<PokemonScreen> {
         ),
       ),
     );
+  }
+}
+
+mixin CompleteStateMixin<T extends StatefulWidget> on State<T> {
+  void completeState();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      completeState();
+    });
   }
 }

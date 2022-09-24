@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:pokedex/src/features/pokemon/infra/datasources/pokemon_datasource.dart';
+import 'package:pokedex/src/features/pokemon/infra/datasources/pokemon_remote_datasource.dart';
 import 'package:pokedex/src/features/pokemon/infra/models/pokemon_response_model.dart';
 
-class PokemonDatasource implements IPokemonDatasource {
+class PokemonRemoteDatasource implements IPokemonRemoteDataSource {
   final Dio dio;
 
-  PokemonDatasource(this.dio);
+  PokemonRemoteDatasource(this.dio);
 
   @override
   Future<PokemonResponseModel> getAllPokemons([String? url]) async {
