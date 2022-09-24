@@ -8,8 +8,9 @@ class LoadingPokemonState implements PokemonState {}
 
 class SuccessPokemonState implements PokemonState {
   final List<PokemonEntity> pokemons;
+  final PokemonResponseEntity? responseEntity;
 
-  SuccessPokemonState(this.pokemons);
+  SuccessPokemonState(this.pokemons, [this.responseEntity]);
 }
 
 class ErrorPokemonState implements PokemonState {

@@ -2,10 +2,14 @@ part of 'pokemon_bloc.dart';
 
 abstract class PokemonEvent {}
 
-class GetByIdPokemonEvent implements PokemonEvent {
-  final int id;
+class GetByNamePokemonEvent implements PokemonEvent {
+  final String name;
 
-  GetByIdPokemonEvent(this.id);
+  GetByNamePokemonEvent(this.name);
 }
 
-class GetAllPokemonEvent implements PokemonEvent {}
+class GetAllPokemonEvent implements PokemonEvent {
+  final PokemonResponseEntity responseEntity;
+
+  GetAllPokemonEvent(this.responseEntity);
+}

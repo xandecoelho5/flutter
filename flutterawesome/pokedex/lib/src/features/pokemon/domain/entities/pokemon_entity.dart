@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:pokedex/src/features/pokemon/domain/value_objects/base_stats.dart';
 
-class PokemonEntity {
+class PokemonEntity extends Equatable {
   final int id;
   final String name;
   final String imageUrl;
-  final List<String> types;
+  final List<dynamic> types;
   final bool isFavourite;
-  final double height;
-  final double weight;
+  final int height;
+  final int weight;
   final BaseStats baseStats;
 
   const PokemonEntity({
@@ -22,4 +23,7 @@ class PokemonEntity {
   });
 
   double get bmi => weight / (height * height);
+
+  @override
+  List<Object> get props => [id];
 }

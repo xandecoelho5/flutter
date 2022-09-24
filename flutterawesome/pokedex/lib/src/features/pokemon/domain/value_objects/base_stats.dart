@@ -30,35 +30,36 @@ class BaseStats {
                   defense.value +
                   specialAttack.value +
                   specialDefense.value +
-                  speed.value) /
+                  speed.value) ~/
               6,
         );
 }
 
 class Hp extends BaseStatsDef {
-  Hp(value) : super.withMaxValue('Hp', value, ((2 * value + 10) + 110) as int);
+  Hp(int value)
+      : super.withMaxValue('Hp', value, ((2 * value + 10) + 110).toInt());
 }
 
 class Attack extends BaseStatsDef {
-  Attack(value) : super('Attack', value);
+  Attack(int value) : super('Attack', value);
 }
 
 class Defense extends BaseStatsDef {
-  Defense(value) : super('Defense', value);
+  Defense(int value) : super('Defense', value);
 }
 
 class SpecialAttack extends BaseStatsDef {
-  SpecialAttack(value) : super('Special Attack', value);
+  SpecialAttack(int value) : super('Special Attack', value);
 }
 
 class SpecialDefense extends BaseStatsDef {
-  SpecialDefense(value) : super('Special Defense', value);
+  SpecialDefense(int value) : super('Special Defense', value);
 }
 
 class Speed extends BaseStatsDef {
-  Speed(value) : super('Speed', value);
+  Speed(int value) : super('Speed', value);
 }
 
 class AveragePower extends BaseStatsDef {
-  AveragePower(value) : super('Avg. Power', value);
+  AveragePower(int value) : super('Avg. Power', value);
 }

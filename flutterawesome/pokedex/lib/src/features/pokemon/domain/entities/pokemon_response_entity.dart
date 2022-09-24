@@ -5,4 +5,9 @@ class PokemonResponseEntity {
   final List<PokemonModel> pokemons;
 
   const PokemonResponseEntity({this.next, required this.pokemons});
+
+  @override
+  String toString() {
+    return 'PokemonResponseEntity{next: $next, pokemons: $pokemons}';
+  }
 }

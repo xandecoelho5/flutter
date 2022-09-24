@@ -3,15 +3,20 @@ import 'package:pokedex/src/features/pokemon/domain/repositories/pokemon_reposit
 import 'package:pokedex/src/features/pokemon/infra/adapters/pokemon_entity_adapter.dart';
 import 'package:pokedex/src/features/pokemon/infra/datasources/pokemon_datasource.dart';
 
+import '../../domain/entities/pokemon_response_entity.dart';
+
 class PokemonRepository implements IPokemonRepository {
   final IPokemonDatasource datasource;
 
   PokemonRepository(this.datasource);
 
   @override
-  Future<List<PokemonEntity>> getAllPokemons() async {
-    final responseModel = await datasource.getAllPokemons();
-    return list.map((e) => PokemonEntityAdapter.fromMap(e)).toList();
+  Future<PokemonResponseEntity> getAllPokemons([String? url]) async {
+    final responseModel = await datasource.getAllPokemons(url);
+    return PokemonResponseEntity(
+      next: responseModel.next,
+      pokemons: responseModel.results,
+    );
   }
 
   @override

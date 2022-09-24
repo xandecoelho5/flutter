@@ -5,6 +5,7 @@ import 'package:pokedex/src/features/pokemon/domain/value_objects/base_stats.dar
 import 'package:pokedex/src/features/pokemon/presenter/components/favourite_button.dart';
 
 import '../../../../core/utils/dimensions.dart';
+import '../../../../core/utils/utils.dart';
 
 class PokemonDetailsScreen extends StatelessWidget {
   const PokemonDetailsScreen({Key? key, required this.pokemon})
@@ -30,7 +31,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    pokemon.name,
+                    Utils.capitalize(pokemon.name),
                     style: const TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w700,

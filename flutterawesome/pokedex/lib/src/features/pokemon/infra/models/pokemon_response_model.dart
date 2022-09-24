@@ -19,15 +19,8 @@ class PokemonResponseModel extends PokemonResponseEntity {
         count: map["count"],
         next: map["next"],
         previous: map["previous"],
-        results: (map["results"] as List<Map<String, dynamic>>)
-            .map(PokemonModelAdapter.fromMap)
+        results: (map["results"] as List)
+            .map((e) => PokemonModelAdapter.fromMap(e))
             .toList(),
       );
-
-  Map<String, dynamic> toMap() => {
-        "count": count,
-        "next": next,
-        "previous": previous,
-        "results": results,
-      };
 }

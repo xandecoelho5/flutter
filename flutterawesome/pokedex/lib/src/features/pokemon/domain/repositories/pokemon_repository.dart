@@ -1,6 +1,7 @@
 import '../entities/pokemon_entity.dart';
+import '../entities/pokemon_response_entity.dart';
 
 abstract class IPokemonRepository {
   Future<PokemonEntity> getPokemonByName(String name);
-  Future<List<PokemonEntity>> getAllPokemons();
+  Future<PokemonResponseEntity> getAllPokemons([String? url]);
 }

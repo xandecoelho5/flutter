@@ -1,8 +1,8 @@
-import '../entities/pokemon_entity.dart';
+import '../entities/pokemon_response_entity.dart';
 import '../repositories/pokemon_repository.dart';
 
 abstract class IGetAllPokemons {
-  Future<List<PokemonEntity>> call();
+  Future<PokemonResponseEntity> call([String? url]);
 }
 
 class GetAllPokemons implements IGetAllPokemons {
@@ -11,7 +11,7 @@ class GetAllPokemons implements IGetAllPokemons {
   GetAllPokemons(this.repository);
 
   @override
-  Future<List<PokemonEntity>> call() async {
-    return await repository.getAllPokemons();
+  Future<PokemonResponseEntity> call([String? url]) async {
+    return await repository.getAllPokemons(url);
   }
 }

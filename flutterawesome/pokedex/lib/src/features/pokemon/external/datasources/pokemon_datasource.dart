@@ -8,9 +8,9 @@ class PokemonDatasource implements IPokemonDatasource {
   PokemonDatasource(this.dio);
 
   @override
-  Future<PokemonResponseModel> getAllPokemons() async {
+  Future<PokemonResponseModel> getAllPokemons([String? url]) async {
     try {
-      final response = await dio.get('');
+      final response = await dio.get(url ?? '');
       return PokemonResponseModel.fromMap(response.data);
     } catch (e) {
       throw Exception(e);

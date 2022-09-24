@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_entity.dart';
+import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_response_entity.dart';
 import 'package:pokedex/src/features/pokemon/presenter/blocs/pokemon_bloc.dart';
 import 'package:pokedex/src/features/pokemon/presenter/components/pokemon_grid_list.dart';
 
 import '../../../../core/utils/colors.dart';
 
-class PokemonScreen extends StatelessWidget {
+class PokemonScreen extends StatefulWidget {
   const PokemonScreen({Key? key}) : super(key: key);
+
+  @override
+  State<PokemonScreen> createState() => _PokemonScreenState();
+}
+
+class _PokemonScreenState extends State<PokemonScreen> {
+  final List<PokemonEntity> pokemonList = [];
+  var pokemonResponseEntity = PokemonResponseEntity(pokemons: []);
 
   AppBar appBarTitle() {
     return AppBar(
@@ -30,7 +40,9 @@ class PokemonScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       actions: [
         IconButton(
-          onPressed: () => Modular.get<PokemonBloc>().getAllPokemons(),
+          onPressed: () => Modular.get<PokemonBloc>().add(
+            GetAllPokemonEvent(pokemonResponseEntity),
+          ),
           icon: const Icon(Icons.not_started, color: kPrimaryColor),
         ),
       ],
@@ -103,7 +115,17 @@ class PokemonScreen extends StatelessWidget {
               }
 
               if (state is SuccessPokemonState) {
-                return PokemonGridList(pokemons: state.pokemons);
+                for (final pokemon in state.pokemons) {
+                  if (!pokemonList.contains(pokemon)) {
+                    pokemonList.add(pokemon);
+                  }
+                }
+
+                if (state.responseEntity?.next != null) {
+                  pokemonResponseEntity = state.responseEntity!;
+                }
+
+                return PokemonGridList(pokemons: pokemonList);
               }
 
               return const Center(child: Text('Error'));
@@ -118,7 +140,7 @@ class PokemonScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBarTitle(),
       body: DefaultTabController(
-        initialIndex: 1,
+        initialIndex: 0,
         length: 2,
         child: Scaffold(
           appBar: appBar(),
