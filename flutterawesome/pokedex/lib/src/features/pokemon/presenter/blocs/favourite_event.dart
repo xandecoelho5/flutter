@@ -2,6 +2,8 @@ part of 'favourite_bloc.dart';
 
 abstract class FavouriteEvent {}
 
+class GetAllFavouritesEvent implements FavouriteEvent {}
+
 class FetchFavouritesEvent implements FavouriteEvent {}
 
 class AddFavouriteEvent implements FavouriteEvent {

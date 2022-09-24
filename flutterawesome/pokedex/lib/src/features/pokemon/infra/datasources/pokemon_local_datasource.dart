@@ -7,5 +7,7 @@ abstract class IPokemonLocalDatasource {
 
   Future<Stream<List<PokemonEntity>>> getFavouritesPokemon();
 
-  List<PokemonEntity> getAll();
+  Future<List<PokemonEntity>> getAllFavouritesPokemon();
+
+  PokemonEntity? get(dynamic key);
 }

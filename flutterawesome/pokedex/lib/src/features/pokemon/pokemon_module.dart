@@ -1,8 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokedex/src/features/pokemon/domain/repositories/pokemon_repository.dart';
 import 'package:pokedex/src/features/pokemon/domain/usecases/add_favourite_pokemon.dart';
+import 'package:pokedex/src/features/pokemon/domain/usecases/get_all_favourites_pokemon.dart';
 import 'package:pokedex/src/features/pokemon/domain/usecases/get_all_pokemons.dart';
-import 'package:pokedex/src/features/pokemon/domain/usecases/get_favourite_pokemons.dart';
+import 'package:pokedex/src/features/pokemon/domain/usecases/get_favourites_pokemons.dart';
 import 'package:pokedex/src/features/pokemon/domain/usecases/get_pokemon_by_name.dart';
 import 'package:pokedex/src/features/pokemon/domain/usecases/remove_favourite_pokemon.dart';
 import 'package:pokedex/src/features/pokemon/external/datasources/pokemon_remote_datasource.dart';
@@ -27,10 +28,14 @@ class PokemonModule extends Module {
     //   (i) => PokemonHiveDatasource.getInstance(),
     // ),
     Bind.singleton<IPokemonLocalDatasource>(
-        (i) => PokemonHiveDatasource.getInstance()),
+      (i) => PokemonHiveDatasource.getInstance(),
+    ),
     // repositories
     Bind.singleton<IPokemonRepository>((i) => PokemonRepository(i(), i())),
     // usecases
+    Bind.singleton<IGetAllFavouritesPokemon>(
+      (i) => GetAllFavouritesPokemon(i()),
+    ),
     Bind.singleton<IAddFavouritePokemon>((i) => AddFavouritePokemon(i())),
     Bind.singleton<IRemoveFavouritePokemon>((i) => RemoveFavouritePokemon(i())),
     Bind.singleton<IGetFavouritesPokemons>((i) => GetFavouritesPokemons(i())),
@@ -38,7 +43,7 @@ class PokemonModule extends Module {
     Bind.singleton<IGetAllPokemons>((i) => GetAllPokemons(i())),
     // blocs
     Bind.singleton((i) => PokemonBloc(i(), i())),
-    Bind.singleton((i) => FavouriteBloc(i(), i(), i())),
+    Bind.singleton((i) => FavouriteBloc(i(), i(), i(), i())),
   ];
 
   @override

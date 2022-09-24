@@ -7,4 +7,5 @@ abstract class IPokemonRepository {
   Future<void> addFavouritePokemon(PokemonEntity pokemon);
   Future<void> removeFavouritePokemon(PokemonEntity pokemon);
   Future<Stream<List<PokemonEntity>>> getFavouritesPokemons();
+  Future<List<PokemonEntity>> getAllFavouritesPokemon();
 }

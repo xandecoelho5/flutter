@@ -41,7 +41,7 @@ class PokemonHiveDatasource implements IPokemonLocalDatasource {
 
   @override
   Future<void> addFavouritePokemon(PokemonEntity pokemon) async {
-    await _box!.put(pokemon.id.toString(), pokemon);
+    await _box!.put(pokemon.id, pokemon);
   }
 
   @override
@@ -52,11 +52,17 @@ class PokemonHiveDatasource implements IPokemonLocalDatasource {
 
   @override
   Future<void> removeFavouritePokemon(PokemonEntity pokemon) async {
-    await _box!.delete(pokemon.id.toString());
+    await _box!.delete(pokemon.id);
   }
 
   @override
-  List<PokemonEntity> getAll() {
+  Future<List<PokemonEntity>> getAllFavouritesPokemon() async {
+    await _open();
     return _box!.values.toList();
+  }
+
+  @override
+  PokemonEntity? get(dynamic key) {
+    return _box!.get(key);
   }
 }

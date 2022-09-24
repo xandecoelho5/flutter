@@ -24,7 +24,12 @@ class PokemonRepository implements IPokemonRepository {
   @override
   Future<PokemonEntity> getPokemonByName(String name) async {
     final map = await remoteDatasource.getPokemonByName(name);
-    return PokemonEntityAdapter.fromMap(map);
+    final pokemon = PokemonEntityAdapter.fromMap(map);
+    final savedPokemon = localDatasource.get(pokemon.id);
+    if (savedPokemon != null) {
+      pokemon.isFavourite = true;
+    }
+    return pokemon;
   }
 
   @override
@@ -39,7 +44,11 @@ class PokemonRepository implements IPokemonRepository {
 
   @override
   Future<Stream<List<PokemonEntity>>> getFavouritesPokemons() async {
-    final stream = localDatasource.getFavouritesPokemon();
-    return stream;
+    return localDatasource.getFavouritesPokemon();
+  }
+
+  @override
+  Future<List<PokemonEntity>> getAllFavouritesPokemon() async {
+    return await localDatasource.getAllFavouritesPokemon();
   }
 }
