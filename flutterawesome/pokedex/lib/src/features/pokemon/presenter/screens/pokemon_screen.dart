@@ -86,10 +86,7 @@ class _PokemonScreenState extends State<PokemonScreen> with CompleteStateMixin {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Favourites',
-                    style: TextStyle(fontSize: 16),
-                  ),
+                  const Text('Favourites', style: TextStyle(fontSize: 16)),
                   const SizedBox(width: 4),
                   BlocBuilder<FavouriteBloc, FavouriteState>(
                     bloc: Modular.get<FavouriteBloc>(),

@@ -24,9 +24,6 @@ class PokemonModule extends Module {
     Bind.singleton<IPokemonRemoteDataSource>(
       (i) => PokemonRemoteDatasource(i()),
     ),
-    // AsyncBind<IPokemonLocalDatasource>(
-    //   (i) => PokemonHiveDatasource.getInstance(),
-    // ),
     Bind.singleton<IPokemonLocalDatasource>(
       (i) => PokemonHiveDatasource.getInstance(),
     ),
