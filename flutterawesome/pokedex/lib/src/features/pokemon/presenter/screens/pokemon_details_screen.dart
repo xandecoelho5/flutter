@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:pokedex/src/core/utils/assets.dart';
 import 'package:pokedex/src/core/utils/colors.dart';
 import 'package:pokedex/src/features/pokemon/domain/entities/pokemon_entity.dart';
 import 'package:pokedex/src/features/pokemon/domain/value_objects/base_stats.dart';
 import 'package:pokedex/src/features/pokemon/presenter/components/favourite_button.dart';
 
 import '../../../../core/utils/dimensions.dart';
+import '../../../../core/utils/types.dart';
 import '../../../../core/utils/utils.dart';
 import '../blocs/favourite_bloc.dart';
 
@@ -21,15 +23,25 @@ class PokemonDetailsScreen extends StatefulWidget {
 }
 
 class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
+  late Color _backgroundColor;
+
   _pokemonContainer() {
     return Stack(
       children: [
         Container(
           width: double.infinity,
           height: 200,
-          color: kGreenColor,
           padding: const EdgeInsets.symmetric(
             horizontal: kPokemonScreenHorPadding,
+          ),
+          decoration: BoxDecoration(
+            color: _backgroundColor.withOpacity(0.25),
+            border: Border(
+              top: BorderSide(
+                color: kUnselectedTabColor.withOpacity(0.25),
+                width: 1,
+              ),
+            ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -63,9 +75,10 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
           bottom: -16,
           right: -52,
           child: Image.asset(
-            'assets/icons/pokemon_bg.png',
+            Assets.pokemonBg,
             width: 176,
             height: 176,
+            color: _backgroundColor.withOpacity(0.25),
           ),
         ),
         Positioned(
@@ -82,7 +95,14 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
   }
 
   _bmiContainer() {
-    Column columnInfo(String label, double value) {
+    Column columnInfo(String label, num value) {
+      formatValue(String val) {
+        if (val.endsWith('.0')) {
+          return val.split('.')[0];
+        }
+        return val;
+      }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -96,7 +116,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            value.toStringAsFixed(1),
+            formatValue(value.toStringAsFixed(1)),
             style: const TextStyle(
               fontSize: 14,
               color: kTextColor,
@@ -116,11 +136,11 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
       ),
       child: Row(
         children: [
-          columnInfo('Height', 69),
+          columnInfo('Height', widget.pokemon.height),
           const SizedBox(width: 48),
-          columnInfo('Weight', 7),
+          columnInfo('Weight', widget.pokemon.weight),
           const SizedBox(width: 48),
-          columnInfo('BMI', 14.7),
+          columnInfo('BMI', widget.pokemon.bmi),
         ],
       ),
     );
@@ -253,14 +273,17 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _backgroundColor = PokemonType.getColorByName(widget.pokemon.types.first);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: kGreenColor,
+        backgroundColor: _backgroundColor.withOpacity(0.25),
         elevation: 2,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: kTextColor),
           onPressed: () => Navigator.pop(context),
         ),
+        shadowColor: Colors.white.withOpacity(0.05),
       ),
       body: SingleChildScrollView(
         child: BlocListener<FavouriteBloc, FavouriteState>(

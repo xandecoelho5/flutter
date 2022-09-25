@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _fetchInitialData() async {
-    await Future.delayed(const Duration(seconds: 2), () {
+    await Future.delayed(const Duration(seconds: 1), () {
       Modular.to.navigate('/pokemon/');
     });
   }

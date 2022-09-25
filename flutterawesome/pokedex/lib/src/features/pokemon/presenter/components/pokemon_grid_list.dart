@@ -21,7 +21,7 @@ class PokemonGridList extends StatelessWidget {
         crossAxisCount: 3,
         crossAxisSpacing: 10,
         mainAxisSpacing: 12,
-        childAspectRatio: 0.575,
+        mainAxisExtent: 190,
       ),
       itemBuilder: (ctx, index) => PokemonCard(pokemon: pokemons[index]),
     );

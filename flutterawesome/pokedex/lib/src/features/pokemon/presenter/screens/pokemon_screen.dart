@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:pokedex/src/features/pokemon/presenter/blocs/favourite_bloc.dart';
 import 'package:pokedex/src/features/pokemon/presenter/components/pokemon_grid_list.dart';
 
+import '../../../../core/utils/assets.dart';
 import '../../../../core/utils/colors.dart';
 import '../../domain/entities/pokemon_entity.dart';
 import '../../domain/entities/pokemon_response_entity.dart';
@@ -46,7 +47,7 @@ class _PokemonScreenState extends State<PokemonScreen> with CompleteStateMixin {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset('assets/icons/pokeball.png', width: 30),
+          Image.asset(Assets.pokeball, width: 30),
           const SizedBox(width: 10),
           const Text(
             'Pokedex',
@@ -143,7 +144,6 @@ class _PokemonScreenState extends State<PokemonScreen> with CompleteStateMixin {
             }
 
             if (state is SuccessPokemonState) {
-              // state.pokemons.forEach((e) => print(e.isFavourite));
               for (final pokemon in state.pokemons) {
                 if (!pokemonList.contains(pokemon)) {
                   pokemonList.add(pokemon);
