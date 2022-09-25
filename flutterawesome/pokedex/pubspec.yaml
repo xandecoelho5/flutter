@@ -44,3 +44,8 @@ flutter:
         - asset: assets/fonts/Noto_Sans/NotoSans-Bold.ttf
         - asset: assets/fonts/Noto_Sans/NotoSans-Medium.ttf
         - asset: assets/fonts/Noto_Sans/NotoSans-Light.ttf
+        - asset: assets/fonts/Noto_Sans/NotoSans-SemiBold.ttf
+        - asset: assets/fonts/Noto_Sans/NotoSans-Thin.ttf
+        - asset: assets/fonts/Noto_Sans/NotoSans-ExtraLight.ttf
+
+
