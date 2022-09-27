@@ -7,3 +7,8 @@ const kHomeTitleStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.white,
 );
+
+const kTopBorderRadius = BorderRadius.only(
+  topLeft: Radius.circular(25),
+  topRight: Radius.circular(25),
+);

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:muzik/utils/assets.dart';
-import 'package:muzik/widgets/custom_scaffold.dart';
 import 'package:muzik/widgets/music_player.dart';
 
-import '../widgets/custom_app_bar.dart';
 import '../widgets/custom_card.dart';
 
 class PlaylistScreen extends StatelessWidget {
@@ -149,27 +147,24 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: CustomAppBar.build(context),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  children: [
-                    _albumTile(),
-                    _songsList(),
-                  ],
-                ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Column(
+                children: [
+                  _albumTile(),
+                  _songsList(),
+                ],
               ),
             ),
-            const MusicPlayer(),
-          ],
-        ),
+          ),
+          const MusicPlayer(),
+        ],
       ),
     );
   }

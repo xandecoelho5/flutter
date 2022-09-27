@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:muzik/screens/bookmark_screen.dart';
 import 'package:muzik/screens/home_screen.dart';
+import 'package:muzik/screens/main_screen.dart';
 import 'package:muzik/screens/playing_screen.dart';
 import 'package:muzik/screens/playlist_screen.dart';
 import 'package:muzik/screens/search_screen.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
       initialRoute: Routes.splash,
       routes: {
         Routes.splash: (context) => const SplashScreen(),
+        Routes.main: (context) => const MainScreen(),
         Routes.home: (context) => const HomeScreen(),
         Routes.search: (context) => const SearchScreen(),
         Routes.song: (context) => const SongScreen(),

@@ -4,7 +4,6 @@ import 'package:muzik/mocks/mocks.dart';
 import 'package:muzik/models/bookmark.dart';
 
 import '../utils/constants.dart';
-import '../widgets/custom_scaffold.dart';
 
 class BookmarkScreen extends StatelessWidget {
   const BookmarkScreen({Key? key}) : super(key: key);
@@ -18,13 +17,9 @@ class BookmarkScreen extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: const Icon(Icons.arrow_back_ios_new),
-        splashRadius: 24,
-      ),
       actions: [
         IconButton(
           onPressed: () {},
@@ -85,9 +80,9 @@ class BookmarkScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       appBar: _appBar(context),
-      child: _bookmarkList(),
+      body: _bookmarkList(),
     );
   }
 }

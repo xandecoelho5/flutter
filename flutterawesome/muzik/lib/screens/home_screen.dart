@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:muzik/utils/constants.dart';
 import 'package:muzik/widgets/custom_card.dart';
-import 'package:muzik/widgets/custom_scaffold.dart';
 import 'package:muzik/widgets/music_player.dart';
 
 import '../utils/assets.dart';
@@ -73,42 +72,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 16.0, top: 16),
-                child: Text(
-                  'DISCOVER',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 16.0, top: 16),
+              child: Text(
+                'DISCOVER',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16.0),
-              _genres(),
-              const SizedBox(height: 16.0),
-              const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Text('Trending Albums', style: kHomeTitleStyle),
-              ),
-              const SizedBox(height: 16.0),
-              _albums(),
-              const SizedBox(height: 40.0),
-              const Padding(
-                padding: EdgeInsets.only(left: 24.0),
-                child: Text('Trending Songs', style: kHomeTitleStyle),
-              ),
-              const SizedBox(height: 16.0),
-              _songs(),
-            ],
-          ),
-          const MusicPlayer(),
-        ],
-      ),
+            ),
+            const SizedBox(height: 16.0),
+            _genres(),
+            const SizedBox(height: 16.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0),
+              child: Text('Trending Albums', style: kHomeTitleStyle),
+            ),
+            const SizedBox(height: 16.0),
+            _albums(),
+            const SizedBox(height: 40.0),
+            const Padding(
+              padding: EdgeInsets.only(left: 24.0),
+              child: Text('Trending Songs', style: kHomeTitleStyle),
+            ),
+            const SizedBox(height: 16.0),
+            _songs(),
+          ],
+        ),
+        const MusicPlayer(),
+      ],
     );
   }
 }

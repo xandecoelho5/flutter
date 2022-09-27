@@ -4,10 +4,8 @@ import 'package:muzik/mocks/mocks.dart';
 import 'package:muzik/models/album.dart';
 import 'package:muzik/widgets/buttons_row.dart';
 import 'package:muzik/widgets/custom_card.dart';
-import 'package:muzik/widgets/custom_scaffold.dart';
 
 import '../utils/assets.dart';
-import '../widgets/custom_app_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -119,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     return Expanded(
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
         itemCount: albumsMock.length,
         itemBuilder: (ctx, index) => resultTile(albumsMock[index]),
         separatorBuilder: (ctx, index) => const Divider(
@@ -132,8 +130,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: CustomAppBar.build(context),
+    return Padding(
+      padding: const EdgeInsets.only(top: 24.0),
       child: Column(
         children: [
           _searchBar(),
