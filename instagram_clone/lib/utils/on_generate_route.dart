@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
 import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
 import 'package:instagram_clone/features/presentation/pages/credential/sign_in_page.dart';
 import 'package:instagram_clone/features/presentation/pages/credential/sign_up_page.dart';
@@ -20,7 +21,12 @@ class OnGenerateRoute {
           return _routeBuilder(const NoPageFound());
         }
       case PageConst.updatePostPage:
-        return _routeBuilder(const UpdatePostPage());
+        {
+          if (args is PostEntity) {
+            return _routeBuilder(UpdatePostPage(post: args));
+          }
+          return _routeBuilder(const NoPageFound());
+        }
       case PageConst.commentPage:
         return _routeBuilder(const CommentPage());
       case PageConst.signInPage:

@@ -6,11 +6,17 @@ import 'package:instagram_clone/features/data/data_sources/remote_data_source/fi
 import 'package:instagram_clone/features/data/data_sources/remote_data_source/firebase_remote_data_source_impl.dart';
 import 'package:instagram_clone/features/data/repository/firebase_repository_impl.dart';
 import 'package:instagram_clone/features/domain/repository/firebase_repository.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/delete_post_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/like_post_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/read_posts_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/update_post_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
 import 'package:instagram_clone/features/presentation/cubit/credential/credential_cubit.dart';
+import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/user/user_cubit.dart';
 
+import '../features/domain/usecases/firebase_usecases/post/create_post_usecase.dart';
 import '../features/domain/usecases/firebase_usecases/user/create_user_usecase.dart';
 import '../features/domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import '../features/domain/usecases/firebase_usecases/user/get_single_user_usecase.dart';
@@ -26,12 +32,16 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   // Cubits
+  //// User
   sl.registerFactory(() => AuthCubit(sl(), sl(), sl()));
   sl.registerFactory(() => CredentialCubit(sl(), sl()));
   sl.registerFactory(() => UserCubit(sl(), sl()));
   sl.registerFactory(() => GetSingleUserCubit(sl()));
+  //// Post
+  sl.registerFactory(() => PostCubit(sl(), sl(), sl(), sl(), sl()));
 
   // Use Cases
+  //// User
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
   sl.registerLazySingleton(() => IsSignInUseCase(sl()));
   sl.registerLazySingleton(() => GetCurrentUidUseCase(sl()));
@@ -41,8 +51,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUsersUseCase(sl()));
   sl.registerLazySingleton(() => CreateUserUseCase(sl()));
   sl.registerLazySingleton(() => GetSingleUserUseCase(sl()));
-  // Cloud Storage
+  //// Cloud Storage
   sl.registerLazySingleton(() => UploadImageToStorageUseCase(sl()));
+  //// Post
+  sl.registerLazySingleton(() => CreatePostUseCase(sl()));
+  sl.registerLazySingleton(() => UpdatePostUseCase(sl()));
+  sl.registerLazySingleton(() => DeletePostUseCase(sl()));
+  sl.registerLazySingleton(() => ReadPostsUseCase(sl()));
+  sl.registerLazySingleton(() => LikePostUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(

@@ -108,16 +108,16 @@ class Helper {
     return Image.file(image, fit: BoxFit.cover);
   }
 
-  static Widget loadingIndicator(bool isLoading) {
+  static Widget loadingIndicator(bool isLoading, [String? message]) {
     if (isLoading) {
       return Padding(
         padding: const EdgeInsets.only(top: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'Please wait...',
-              style: TextStyle(color: primaryColor, fontSize: 16),
+            Text(
+              '${message ?? 'Please wait'}...',
+              style: const TextStyle(color: primaryColor, fontSize: 16),
             ),
             sizeHor(10),
             const CircularProgressIndicator(color: blueColor),

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone/features/data/data_sources/remote_data_source/firebase_remote_data_source.dart';
+import 'package:instagram_clone/features/data/models/post/post_model.dart';
 import 'package:instagram_clone/features/data/models/user/user_model.dart';
 import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
 import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
@@ -217,32 +218,83 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
-  Future<void> createPost(PostEntity post) {
-    // TODO: implement createPost
-    throw UnimplementedError();
+  Future<void> createPost(PostEntity post) async {
+    final postCollection = firebaseFirestore.collection(FirebaseConst.posts);
+
+    final newPost = PostModel(
+      userProfileUrl: post.userProfileUrl,
+      username: post.username,
+      totalLikes: 0,
+      totalComments: 0,
+      imageUrl: post.imageUrl,
+      id: post.id,
+      likes: const [],
+      description: post.description,
+      creatorUid: post.creatorUid,
+      createdAt: post.createdAt,
+    ).toJson();
+
+    try {
+      final postDocRef = await postCollection.doc(post.id).get();
+
+      if (!postDocRef.exists) {
+        postCollection.doc(post.id).set(newPost);
+      } else {
+        postCollection.doc(post.id).update(newPost);
+      }
+    } catch (e) {
+      print('some error occured $e');
+    }
   }
 
   @override
-  Future<void> deletePost(PostEntity post) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<void> deletePost(PostEntity post) async {
+    final postCollection = firebaseFirestore.collection(FirebaseConst.posts);
+
+    try {
+      postCollection.doc(post.id).delete();
+    } catch (e) {
+      print('some error occured $e');
+    }
   }
 
   @override
-  Future<void> likePost(PostEntity post) {
-    // TODO: implement likePost
-    throw UnimplementedError();
+  Future<void> likePost(PostEntity post) async {
+    final postCollection = firebaseFirestore.collection(FirebaseConst.posts);
+
+    final currentUid = await getCurrentUid();
+    final postRef = await postCollection.doc(post.id).get();
+
+    if (postRef.exists) {
+      final hasLike = (postRef.get('likes') as List).contains(currentUid);
+      postCollection.doc(post.id).update({
+        'likes': hasLike
+            ? FieldValue.arrayRemove([currentUid])
+            : FieldValue.arrayUnion([currentUid]),
+        'totalLikes': FieldValue.increment(hasLike ? -1 : 1),
+      });
+    }
   }
 
   @override
   Stream<List<PostEntity>> readPosts(PostEntity post) {
-    // TODO: implement readPosts
-    throw UnimplementedError();
+    final postCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .orderBy('createdAt', descending: true);
+    return postCollection
+        .snapshots()
+        .map((qs) => qs.docs.map(PostModel.fromSnapshot).toList());
   }
 
   @override
-  Future<void> updatePost(PostEntity post) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+  Future<void> updatePost(PostEntity post) async {
+    final postCollection = firebaseFirestore.collection(FirebaseConst.posts);
+    Map<String, dynamic> postInfo = {};
+
+    if (post.description.isNotBlank) postInfo['description'] = post.description;
+
+    if (post.imageUrl.isNotBlank) postInfo['imageUrl'] = post.imageUrl;
+
+    postCollection.doc(post.id).update(postInfo);
   }
 }

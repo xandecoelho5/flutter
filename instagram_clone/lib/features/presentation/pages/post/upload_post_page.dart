@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
+import 'package:instagram_clone/features/presentation/pages/post/widgets/upload_post_main_widget.dart';
+import 'package:instagram_clone/utils/injection_container.dart' as di;
 
-import '../../../../utils/consts.dart';
+import '../../cubit/post/post_cubit.dart';
 
 class UploadPostPage extends StatelessWidget {
-  const UploadPostPage({Key? key}) : super(key: key);
+  const UploadPostPage({Key? key, required this.user}) : super(key: key);
+
+  final UserEntity user;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Center(
-        child: Container(
-          width: 150,
-          height: 150,
-          decoration: BoxDecoration(
-            color: secondaryColor.withOpacity(0.3),
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: Icon(Icons.upload, color: primaryColor, size: 40),
-          ),
-        ),
-      ),
+    return BlocProvider<PostCubit>(
+      create: (context) => di.sl<PostCubit>(),
+      child: UploadPostMainWidget(user: user),
     );
   }
 }
