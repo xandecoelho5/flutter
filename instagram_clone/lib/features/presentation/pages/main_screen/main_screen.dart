@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/features/presentation/cubit/user/get_single_user/get_single_user_cubit.dart';
 import 'package:instagram_clone/features/presentation/pages/activity/activity_page.dart';
 import 'package:instagram_clone/features/presentation/pages/home/home_page.dart';
 import 'package:instagram_clone/features/presentation/pages/post/upload_post_page.dart';
@@ -23,6 +25,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    BlocProvider.of<GetSingleUserCubit>(context).getSingleUser(widget.uid);
     _pageController = PageController();
   }
 
@@ -38,60 +41,65 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: onPageChanged,
-        children: const [
-          HomePage(),
-          SearchPage(),
-          UploadPostPage(),
-          ActivityPage(),
-          ProfilePage(),
-        ],
-      ),
-      bottomNavigationBar: CupertinoTabBar(
-        backgroundColor: backgroundColor,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              color: primaryColor,
+    return BlocBuilder<GetSingleUserCubit, GetSingleUserState>(
+      builder: (context, getSingleUserState) {
+        if (getSingleUserState is GetSingleUserLoaded) {
+          final currentUser = getSingleUserState.user;
+
+          return Scaffold(
+            backgroundColor: backgroundColor,
+            body: PageView(
+              controller: _pageController,
+              onPageChanged: onPageChanged,
+              children: [
+                const HomePage(),
+                const SearchPage(),
+                const UploadPostPage(),
+                const ActivityPage(),
+                ProfilePage(user: currentUser),
+              ],
             ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.search,
-              color: primaryColor,
+            bottomNavigationBar: CupertinoTabBar(
+              currentIndex: _currentIndex,
+              backgroundColor: backgroundColor,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                    color: primaryColor,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.search,
+                    color: primaryColor,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.add_circle,
+                    color: primaryColor,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: primaryColor,
+                  ),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.account_circle_outlined,
+                    color: primaryColor,
+                  ),
+                ),
+              ],
+              onTap: navigationTapped,
             ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add_circle,
-              color: primaryColor,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.favorite,
-              color: primaryColor,
-            ),
-            label: "",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle_outlined,
-              color: primaryColor,
-            ),
-            label: "",
-          ),
-        ],
-        onTap: navigationTapped,
-      ),
+          );
+        }
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 }

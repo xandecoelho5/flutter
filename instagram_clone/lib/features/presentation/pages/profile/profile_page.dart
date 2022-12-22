@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
+import 'package:instagram_clone/features/presentation/cubit/auth/auth_cubit.dart';
+import 'package:instagram_clone/features/presentation/widgets/circle_container.dart';
 import 'package:instagram_clone/utils/consts.dart';
 import 'package:instagram_clone/utils/helper.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
+
+  final UserEntity user;
 
   _openBottomModalSheet(BuildContext context) {
     return Helper.openBottomModalSheet(context, [
@@ -11,7 +17,17 @@ class ProfilePage extends StatelessWidget {
         title: 'Edit Profile',
         onTap: () => Navigator.pushNamed(context, PageConst.editProfilePage),
       ),
-      const ModalAction(title: 'Logout'),
+      ModalAction(
+        title: 'Logout',
+        onTap: () {
+          BlocProvider.of<AuthCubit>(context).loggedOut();
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            PageConst.signInPage,
+            (route) => false,
+          );
+        },
+      ),
     ]);
   }
 
@@ -21,7 +37,10 @@ class ProfilePage extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: backgroundColor,
-        title: const Text("Username", style: TextStyle(color: primaryColor)),
+        title: Text(
+          '${user.username}',
+          style: const TextStyle(color: primaryColor),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -41,21 +60,14 @@ class ProfilePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: secondaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+                  const CircleContainer(size: 80),
                   Row(
                     children: [
                       Column(
                         children: [
-                          Text("0", style: primaryBoldStyle),
+                          Text('${user.totalPosts}', style: primaryBoldStyle),
                           sizeVer(8),
-                          Text(
+                          const Text(
                             'Posts',
                             style: TextStyle(color: primaryColor),
                           ),
@@ -64,9 +76,12 @@ class ProfilePage extends StatelessWidget {
                       sizeHor(25),
                       Column(
                         children: [
-                          Text("54", style: primaryBoldStyle),
-                          sizeVer(8),
                           Text(
+                            '${user.totalFollowers}',
+                            style: primaryBoldStyle,
+                          ),
+                          sizeVer(8),
+                          const Text(
                             'Followers',
                             style: TextStyle(color: primaryColor),
                           ),
@@ -75,9 +90,12 @@ class ProfilePage extends StatelessWidget {
                       sizeHor(25),
                       Column(
                         children: [
-                          Text("123", style: primaryBoldStyle),
-                          sizeVer(8),
                           Text(
+                            '${user.totalFollowing}',
+                            style: primaryBoldStyle,
+                          ),
+                          sizeVer(8),
+                          const Text(
                             'Following',
                             style: TextStyle(color: primaryColor),
                           ),
@@ -88,9 +106,15 @@ class ProfilePage extends StatelessWidget {
                 ],
               ),
               sizeVer(10),
-              Text('Name', style: primaryBoldStyle),
+              Text(
+                '${user.name!.isEmpty ? user.username : user.name}',
+                style: primaryBoldStyle,
+              ),
               sizeVer(10),
-              Text('The bio of user', style: TextStyle(color: primaryColor)),
+              Text(
+                '${user.bio}',
+                style: const TextStyle(color: primaryColor),
+              ),
               sizeVer(10),
               GridView.builder(
                 itemCount: 32,
