@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:instagram_clone/consts.dart';
-import 'package:instagram_clone/features/presentation/pages/credential/sign_up_page.dart';
 import 'package:instagram_clone/features/presentation/widgets/button_container_widget.dart';
 import 'package:instagram_clone/features/presentation/widgets/form_container_widget.dart';
+import 'package:instagram_clone/utils/consts.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -49,9 +48,9 @@ class SignInPage extends StatelessWidget {
                   style: TextStyle(color: primaryColor),
                 ),
                 InkWell(
-                  onTap: () => Navigator.pushAndRemoveUntil(
+                  onTap: () => Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => const SignUpPage()),
+                    PageConst.signUpPage,
                     (route) => false,
                   ),
                   child: const Text(

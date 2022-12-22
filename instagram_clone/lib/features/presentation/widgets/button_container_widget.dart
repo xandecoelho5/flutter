@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone/consts.dart';
+import 'package:instagram_clone/utils/consts.dart';
 
 class ButtonContainerWidget extends StatelessWidget {
   const ButtonContainerWidget({
