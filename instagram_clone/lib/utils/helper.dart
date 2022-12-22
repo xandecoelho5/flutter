@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone/utils/extensions.dart';
 
 import 'consts.dart';
 
@@ -83,4 +88,59 @@ class Helper {
         textColor: Colors.white,
         fontSize: 16.0,
       );
+
+  static Widget profileWidget({String? imageUrl, File? image}) {
+    if (image == null) {
+      if (imageUrl.isBlank) {
+        return Image.asset(Assets.profileDefault, fit: BoxFit.cover);
+      }
+      return CachedNetworkImage(
+        imageUrl: '$imageUrl',
+        fit: BoxFit.cover,
+        progressIndicatorBuilder: (_, u, d) =>
+            const CircularProgressIndicator(),
+        errorWidget: (_, __, ___) => Image.asset(
+          Assets.profileDefault,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+    return Image.file(image, fit: BoxFit.cover);
+  }
+
+  static Widget loadingIndicator(bool isLoading) {
+    if (isLoading) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'Please wait...',
+              style: TextStyle(color: primaryColor, fontSize: 16),
+            ),
+            sizeHor(10),
+            const CircularProgressIndicator(color: blueColor),
+          ],
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  static Future<File?> selectImage() async {
+    try {
+      final pickedFile = await ImagePicker.platform.getImage(
+        source: ImageSource.gallery,
+      );
+      if (pickedFile != null) {
+        return File(pickedFile.path);
+      } else {
+        Helper.toast('No image selected.');
+      }
+    } catch (e) {
+      Helper.toast('Error selecting image: $e');
+    }
+    return null;
+  }
 }

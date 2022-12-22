@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,25 +28,34 @@ class _SignUpPageState extends State<SignUpPage> {
   final _bioController = TextEditingController();
 
   bool _isSigningUp = false;
+  File? _image;
 
   void _signUpUser() {
     setState(() => _isSigningUp = true);
     BlocProvider.of<CredentialCubit>(context)
-        .signUpUser(UserEntity(
-          email: _emailController.text,
-          username: _usernameController.text,
-          password: _passwordController.text,
-          bio: _bioController.text,
-          totalPosts: 0,
-          totalFollowers: 0,
-          totalFollowing: 0,
-          followers: const [],
-          following: const [],
-          profileUrl: '',
-          name: '',
-          website: '',
-        ))
+        .signUpUser(
+          UserEntity(
+            email: _emailController.text,
+            username: _usernameController.text,
+            password: _passwordController.text,
+            bio: _bioController.text,
+            totalPosts: 0,
+            totalFollowers: 0,
+            totalFollowing: 0,
+            followers: const [],
+            following: const [],
+            profileUrl: '',
+            name: '',
+            website: '',
+            imageFile: _image,
+          ),
+        )
         .then((_) => _clear());
+  }
+
+  void _selectImage() async {
+    _image = await Helper.selectImage();
+    setState(() {});
   }
 
   void _clear() {
@@ -86,13 +97,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   CircleContainer(
                     size: 60,
-                    child: Image.asset('assets/profile_default.png'),
+                    child: Helper.profileWidget(image: _image),
                   ),
                   Positioned(
                     right: -10,
                     bottom: -10,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: _selectImage,
+                      splashRadius: 15,
                       icon: const Icon(Icons.add_a_photo, color: blueColor),
                     ),
                   ),
@@ -126,20 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
               text: 'Sign Up',
               onTapListener: _signUpUser,
             ),
-            sizeVer(10),
-            _isSigningUp
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Please wait...',
-                        style: TextStyle(color: primaryColor, fontSize: 16),
-                      ),
-                      sizeHor(10),
-                      const CircularProgressIndicator(color: blueColor),
-                    ],
-                  )
-                : Container(),
+            Helper.loadingIndicator(_isSigningUp),
             const Spacer(),
             const Divider(color: secondaryColor),
             Row(

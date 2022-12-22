@@ -34,3 +34,9 @@ class FirebaseConst {
   static const String comment = 'comment';
   static const String reply = 'reply';
 }
+
+class Assets {
+  Assets._();
+
+  static const String profileDefault = 'assets/profile_default.png';
+}

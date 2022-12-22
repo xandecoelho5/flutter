@@ -76,20 +76,7 @@ class _SignInPageState extends State<SignInPage> {
               text: 'Sign In',
               onTapListener: _signInUser,
             ),
-            sizeVer(10),
-            _isSigningIn
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Please wait...',
-                        style: TextStyle(color: primaryColor, fontSize: 16),
-                      ),
-                      sizeHor(10),
-                      const CircularProgressIndicator(color: blueColor),
-                    ],
-                  )
-                : Container(),
+            Helper.loadingIndicator(_isSigningIn),
             const Spacer(),
             const Divider(color: secondaryColor),
             Row(

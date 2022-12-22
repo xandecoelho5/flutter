@@ -15,7 +15,11 @@ class ProfilePage extends StatelessWidget {
     return Helper.openBottomModalSheet(context, [
       ModalAction(
         title: 'Edit Profile',
-        onTap: () => Navigator.pushNamed(context, PageConst.editProfilePage),
+        onTap: () => Navigator.pushNamed(
+          context,
+          PageConst.editProfilePage,
+          arguments: user,
+        ),
       ),
       ModalAction(
         title: 'Logout',
@@ -60,7 +64,10 @@ class ProfilePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const CircleContainer(size: 80),
+                  CircleContainer(
+                    size: 80,
+                    child: Helper.profileWidget(imageUrl: user.profileUrl),
+                  ),
                   Row(
                     children: [
                       Column(

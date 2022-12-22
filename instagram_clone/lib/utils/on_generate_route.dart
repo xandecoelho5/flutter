@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
 import 'package:instagram_clone/features/presentation/pages/credential/sign_in_page.dart';
 import 'package:instagram_clone/features/presentation/pages/credential/sign_up_page.dart';
 import 'package:instagram_clone/features/presentation/pages/post/comment/comment_page.dart';
@@ -12,7 +13,12 @@ class OnGenerateRoute {
 
     switch (settings.name) {
       case PageConst.editProfilePage:
-        return _routeBuilder(const EditProfilePage());
+        {
+          if (args is UserEntity) {
+            return _routeBuilder(EditProfilePage(user: args));
+          }
+          return _routeBuilder(const NoPageFound());
+        }
       case PageConst.updatePostPage:
         return _routeBuilder(const UpdatePostPage());
       case PageConst.commentPage:
@@ -22,9 +28,7 @@ class OnGenerateRoute {
       case PageConst.signUpPage:
         return _routeBuilder(const SignUpPage());
       default:
-        {
-          const NoPageFound();
-        }
+        return _routeBuilder(const NoPageFound());
     }
   }
 

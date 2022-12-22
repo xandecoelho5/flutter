@@ -17,12 +17,11 @@ class ProfileFormWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title!, style: const TextStyle(color: primaryColor, fontSize: 16)),
-        sizeVer(10),
+        sizeVer(5),
         TextFormField(
           controller: controller,
           style: const TextStyle(color: primaryColor),
           decoration: const InputDecoration(
-            border: InputBorder.none,
             labelStyle: TextStyle(color: primaryColor),
           ),
         ),

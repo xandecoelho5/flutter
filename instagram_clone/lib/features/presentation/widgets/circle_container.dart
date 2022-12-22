@@ -21,7 +21,10 @@ class CircleContainer extends StatelessWidget {
         color: secondaryColor,
         shape: BoxShape.circle,
       ),
-      child: child,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(size / 2),
+        child: child,
+      ),
     );
   }
 }
