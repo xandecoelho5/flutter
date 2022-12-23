@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instagram_clone/utils/extensions.dart';
+import 'package:intl/intl.dart';
 
 import 'consts.dart';
 
@@ -142,5 +144,9 @@ class Helper {
       Helper.toast('Error selecting image: $e');
     }
     return null;
+  }
+
+  static String formatTimestamp(Timestamp timestamp) {
+    return DateFormat('dd/MMM/yyy').format(timestamp.toDate());
   }
 }

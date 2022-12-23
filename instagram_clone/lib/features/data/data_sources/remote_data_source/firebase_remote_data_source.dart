@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../../../domain/entities/comment/comment_entity.dart';
 import '../../../domain/entities/posts/post_entity.dart';
 import '../../../domain/entities/user/user_entity.dart';
 
@@ -36,9 +37,22 @@ abstract class FirebaseRemoteDataSource {
 
   Stream<List<PostEntity>> readPosts(PostEntity post);
 
+  Stream<List<PostEntity>> readSinglePost(String postId);
+
   Future<void> updatePost(PostEntity post);
 
   Future<void> deletePost(PostEntity post);
 
   Future<void> likePost(PostEntity post);
+
+  // Comment Features
+  Future<void> createComment(CommentEntity comment);
+
+  Stream<List<CommentEntity>> readComments(String postId);
+
+  Future<void> updateComment(CommentEntity comment);
+
+  Future<void> deleteComment(CommentEntity comment);
+
+  Future<void> likeComment(CommentEntity comment);
 }

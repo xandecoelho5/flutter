@@ -6,13 +6,21 @@ import 'package:instagram_clone/features/data/data_sources/remote_data_source/fi
 import 'package:instagram_clone/features/data/data_sources/remote_data_source/firebase_remote_data_source_impl.dart';
 import 'package:instagram_clone/features/data/repository/firebase_repository_impl.dart';
 import 'package:instagram_clone/features/domain/repository/firebase_repository.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/comment/create_comment_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/comment/delete_comment_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/comment/like_comment_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/comment/read_comments_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/comment/update_comment_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/delete_post_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/like_post_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/read_posts_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/read_single_post_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/post/update_post_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
+import 'package:instagram_clone/features/presentation/cubit/comment/comment_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/credential/credential_cubit.dart';
+import 'package:instagram_clone/features/presentation/cubit/post/get_single_post/get_single_post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/user/user_cubit.dart';
 
@@ -39,6 +47,9 @@ Future<void> init() async {
   sl.registerFactory(() => GetSingleUserCubit(sl()));
   //// Post
   sl.registerFactory(() => PostCubit(sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => GetSinglePostCubit(sl()));
+  //// Comment
+  sl.registerFactory(() => CommentCubit(sl(), sl(), sl(), sl(), sl()));
 
   // Use Cases
   //// User
@@ -58,7 +69,14 @@ Future<void> init() async {
   sl.registerLazySingleton(() => UpdatePostUseCase(sl()));
   sl.registerLazySingleton(() => DeletePostUseCase(sl()));
   sl.registerLazySingleton(() => ReadPostsUseCase(sl()));
+  sl.registerLazySingleton(() => ReadSinglePostUseCase(sl()));
   sl.registerLazySingleton(() => LikePostUseCase(sl()));
+  //// Comment
+  sl.registerLazySingleton(() => CreateCommentUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateCommentUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteCommentUseCase(sl()));
+  sl.registerLazySingleton(() => ReadCommentsUseCase(sl()));
+  sl.registerLazySingleton(() => LikeCommentUseCase(sl()));
 
   // Repository
   sl.registerLazySingleton<FirebaseRepository>(

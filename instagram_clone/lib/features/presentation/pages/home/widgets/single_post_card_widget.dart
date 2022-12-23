@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:instagram_clone/features/domain/entities/app_entity.dart';
 import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
 import 'package:instagram_clone/features/presentation/pages/post/widgets/like_animation_widget.dart';
 import 'package:instagram_clone/utils/injection_container.dart' as di;
-import 'package:intl/intl.dart';
 
 import '../../../../../utils/consts.dart';
 import '../../../../../utils/helper.dart';
@@ -73,7 +73,8 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
                   CircleContainer(
                     size: 30,
                     child: Helper.profileWidget(
-                        imageUrl: widget.post.userProfileUrl),
+                      imageUrl: widget.post.userProfileUrl,
+                    ),
                   ),
                   sizeHor(10),
                   Text('${widget.post.username}', style: primaryBoldStyle),
@@ -123,19 +124,26 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
             children: [
               Row(
                 children: [
-                  Icon(
-                    widget.post.likes!.contains(_currentUid)
-                        ? Icons.favorite
-                        : Icons.favorite_outline,
-                    color: widget.post.likes!.contains(_currentUid)
-                        ? Colors.red
-                        : primaryColor,
+                  GestureDetector(
+                    onTap: _likePost,
+                    child: Icon(
+                      widget.post.likes!.contains(_currentUid)
+                          ? Icons.favorite
+                          : Icons.favorite_outline,
+                      color: widget.post.likes!.contains(_currentUid)
+                          ? Colors.red
+                          : primaryColor,
+                    ),
                   ),
                   sizeHor(10),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(
                       context,
                       PageConst.commentPage,
+                      arguments: AppEntity(
+                        postId: widget.post.id,
+                        uid: _currentUid,
+                      ),
                     ),
                     child: const Icon(
                       Icons.chat_bubble_outline,
@@ -163,13 +171,20 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
             ],
           ),
           sizeVer(10),
-          Text(
-            'View all ${widget.post.totalComments} comments',
-            style: const TextStyle(color: darkGreyColor),
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(
+              context,
+              PageConst.commentPage,
+              arguments: AppEntity(postId: widget.post.id, uid: _currentUid),
+            ),
+            child: Text(
+              'View all ${widget.post.totalComments} comments',
+              style: const TextStyle(color: darkGreyColor),
+            ),
           ),
           sizeVer(10),
           Text(
-            DateFormat('dd/MMM/yyy').format(widget.post.createdAt!.toDate()),
+            Helper.formatTimestamp(widget.post.createdAt!),
             style: const TextStyle(color: darkGreyColor),
           ),
         ],
