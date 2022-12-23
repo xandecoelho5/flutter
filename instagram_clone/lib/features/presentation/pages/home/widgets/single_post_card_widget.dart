@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
+import 'package:instagram_clone/features/presentation/pages/post/widgets/like_animation_widget.dart';
+import 'package:instagram_clone/utils/injection_container.dart' as di;
 import 'package:intl/intl.dart';
 
 import '../../../../../utils/consts.dart';
 import '../../../../../utils/helper.dart';
 import '../../../widgets/circle_container.dart';
 
-class SinglePostCardWidget extends StatelessWidget {
+class SinglePostCardWidget extends StatefulWidget {
   const SinglePostCardWidget({Key? key, required this.post}) : super(key: key);
 
   final PostEntity post;
+
+  @override
+  State<SinglePostCardWidget> createState() => _SinglePostCardWidgetState();
+}
+
+class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
+  String _currentUid = '';
+
+  bool _isLikeAnimating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    di.sl<GetCurrentUidUseCase>().call().then(
+          (value) => setState(() => _currentUid = value),
+        );
+  }
 
   _openBottomModalSheet(BuildContext context) {
     return Helper.openBottomModalSheet(context, [
@@ -20,16 +40,22 @@ class SinglePostCardWidget extends StatelessWidget {
         onTap: () => Navigator.pushNamed(
           context,
           PageConst.updatePostPage,
-          arguments: post,
+          arguments: widget.post,
         ),
       ),
       ModalAction(
         title: 'Delete Post',
         onTap: () => BlocProvider.of<PostCubit>(context).deletePost(
-          PostEntity(id: post.id),
+          PostEntity(id: widget.post.id),
         ),
       ),
     ]);
+  }
+
+  void _likePost() {
+    BlocProvider.of<PostCubit>(context).likePost(
+      PostEntity(id: widget.post.id),
+    );
   }
 
   @override
@@ -46,10 +72,11 @@ class SinglePostCardWidget extends StatelessWidget {
                 children: [
                   CircleContainer(
                     size: 30,
-                    child: Helper.profileWidget(imageUrl: post.userProfileUrl),
+                    child: Helper.profileWidget(
+                        imageUrl: widget.post.userProfileUrl),
                   ),
                   sizeHor(10),
-                  Text('${post.username}', style: primaryBoldStyle),
+                  Text('${widget.post.username}', style: primaryBoldStyle),
                 ],
               ),
               GestureDetector(
@@ -59,10 +86,36 @@ class SinglePostCardWidget extends StatelessWidget {
             ],
           ),
           sizeVer(10),
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Helper.profileWidget(imageUrl: post.imageUrl),
+          GestureDetector(
+            onDoubleTap: () {
+              _likePost();
+              setState(() => _isLikeAnimating = true);
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Helper.profileWidget(imageUrl: widget.post.imageUrl),
+                ),
+                AnimatedOpacity(
+                  duration: const Duration(milliseconds: 200),
+                  opacity: _isLikeAnimating ? 1 : 0,
+                  child: LikeAnimationWidget(
+                    duration: const Duration(milliseconds: 300),
+                    isLikeAnimating: _isLikeAnimating,
+                    onLikeFinish: () =>
+                        setState(() => _isLikeAnimating = false),
+                    child: const Icon(
+                      Icons.favorite,
+                      size: 80,
+                      color: primaryColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           sizeVer(10),
           Row(
@@ -70,7 +123,14 @@ class SinglePostCardWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.favorite, color: primaryColor),
+                  Icon(
+                    widget.post.likes!.contains(_currentUid)
+                        ? Icons.favorite
+                        : Icons.favorite_outline,
+                    color: widget.post.likes!.contains(_currentUid)
+                        ? Colors.red
+                        : primaryColor,
+                  ),
                   sizeHor(10),
                   GestureDetector(
                     onTap: () => Navigator.pushNamed(
@@ -90,26 +150,26 @@ class SinglePostCardWidget extends StatelessWidget {
             ],
           ),
           sizeVer(10),
-          Text('${post.totalLikes} likes', style: primaryBoldStyle),
+          Text('${widget.post.totalLikes} likes', style: primaryBoldStyle),
           sizeVer(6),
           Row(
             children: [
-              Text('${post.username}', style: primaryBoldStyle),
+              Text('${widget.post.username}', style: primaryBoldStyle),
               sizeHor(10),
               Text(
-                '${post.description}',
+                '${widget.post.description}',
                 style: const TextStyle(color: primaryColor),
               ),
             ],
           ),
           sizeVer(10),
           Text(
-            'View all ${post.totalComments} comments',
+            'View all ${widget.post.totalComments} comments',
             style: const TextStyle(color: darkGreyColor),
           ),
           sizeVer(10),
           Text(
-            DateFormat('dd/MMM/yyy').format(post.createdAt!.toDate()),
+            DateFormat('dd/MMM/yyy').format(widget.post.createdAt!.toDate()),
             style: const TextStyle(color: darkGreyColor),
           ),
         ],
