@@ -208,6 +208,7 @@ class _CommentMainWidgetState extends State<CommentMainWidget> {
                                     ),
                                     onLikeClickListener: () =>
                                         _likeComment(comment),
+                                    user: user,
                                   );
                                 },
                               ),

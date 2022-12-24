@@ -4,6 +4,7 @@ import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
 
 import '../entities/comment/comment_entity.dart';
 import '../entities/posts/post_entity.dart';
+import '../entities/reply/reply_entity.dart';
 
 abstract class FirebaseRepository {
   // Credential Features
@@ -56,4 +57,15 @@ abstract class FirebaseRepository {
   Future<void> deleteComment(CommentEntity comment);
 
   Future<void> likeComment(CommentEntity comment);
+
+  // Reply Features
+  Future<void> createReply(ReplyEntity reply);
+
+  Stream<List<ReplyEntity>> readReplies(ReplyEntity reply);
+
+  Future<void> updateReply(ReplyEntity reply);
+
+  Future<void> deleteReply(ReplyEntity reply);
+
+  Future<void> likeReply(ReplyEntity reply);
 }

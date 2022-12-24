@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:instagram_clone/features/domain/entities/reply/reply_entity.dart';
+
 import '../../../domain/entities/comment/comment_entity.dart';
 import '../../../domain/entities/posts/post_entity.dart';
 import '../../../domain/entities/user/user_entity.dart';
@@ -55,4 +57,15 @@ abstract class FirebaseRemoteDataSource {
   Future<void> deleteComment(CommentEntity comment);
 
   Future<void> likeComment(CommentEntity comment);
+
+  // Reply Features
+  Future<void> createReply(ReplyEntity reply);
+
+  Stream<List<ReplyEntity>> readReplies(ReplyEntity reply);
+
+  Future<void> updateReply(ReplyEntity reply);
+
+  Future<void> deleteReply(ReplyEntity reply);
+
+  Future<void> likeReply(ReplyEntity reply);
 }

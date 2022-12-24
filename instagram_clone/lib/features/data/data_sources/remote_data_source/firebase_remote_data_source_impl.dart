@@ -6,9 +6,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:instagram_clone/features/data/data_sources/remote_data_source/firebase_remote_data_source.dart';
 import 'package:instagram_clone/features/data/models/comment/comment_model.dart';
 import 'package:instagram_clone/features/data/models/post/post_model.dart';
+import 'package:instagram_clone/features/data/models/reply/reply_model.dart';
 import 'package:instagram_clone/features/data/models/user/user_model.dart';
 import 'package:instagram_clone/features/domain/entities/comment/comment_entity.dart';
 import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
+import 'package:instagram_clone/features/domain/entities/reply/reply_entity.dart';
 import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
 import 'package:instagram_clone/utils/extensions.dart';
 import 'package:instagram_clone/utils/helper.dart';
@@ -417,5 +419,108 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         );
       }
     });
+  }
+
+  @override
+  Future<void> createReply(ReplyEntity reply) async {
+    final replyCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(reply.postId)
+        .collection(FirebaseConst.comment)
+        .doc(reply.commentId)
+        .collection(FirebaseConst.reply);
+
+    final newReply = ReplyModel(
+      id: reply.id,
+      creatorUid: reply.creatorUid,
+      username: reply.username,
+      userProfileUrl: reply.userProfileUrl,
+      createdAt: reply.createdAt,
+      description: reply.description,
+      likes: const [],
+      postId: reply.postId,
+      commentId: reply.commentId,
+    ).toJson();
+
+    try {
+      final replyDocRef = await replyCollection.doc(reply.id).get();
+      if (!replyDocRef.exists) {
+        replyCollection.doc(reply.id).set(newReply);
+      } else {
+        replyCollection.doc(reply.id).update(newReply);
+      }
+    } catch (e) {
+      print('some error occured $e');
+    }
+  }
+
+  @override
+  Future<void> deleteReply(ReplyEntity reply) async {
+    final replyCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(reply.postId)
+        .collection(FirebaseConst.comment)
+        .doc(reply.commentId)
+        .collection(FirebaseConst.reply);
+
+    try {
+      replyCollection.doc(reply.id).delete();
+    } catch (e) {
+      print('some error occured $e');
+    }
+  }
+
+  @override
+  Future<void> likeReply(ReplyEntity reply) async {
+    final replyCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(reply.postId)
+        .collection(FirebaseConst.comment)
+        .doc(reply.commentId)
+        .collection(FirebaseConst.reply);
+    final currentUid = await getCurrentUid();
+
+    final replyRef = await replyCollection.doc(reply.id).get();
+
+    if (replyRef.exists) {
+      final hasLike = (replyRef.get('likes') as List).contains(currentUid);
+      replyCollection.doc(reply.id).update({
+        'likes': hasLike
+            ? FieldValue.arrayRemove([currentUid])
+            : FieldValue.arrayUnion([currentUid]),
+      });
+    }
+  }
+
+  @override
+  Stream<List<ReplyEntity>> readReplies(ReplyEntity reply) {
+    final replyCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(reply.postId)
+        .collection(FirebaseConst.comment)
+        .doc(reply.commentId)
+        .collection(FirebaseConst.reply);
+
+    return replyCollection
+        .snapshots()
+        .map((qs) => qs.docs.map(ReplyModel.fromSnapshot).toList());
+  }
+
+  @override
+  Future<void> updateReply(ReplyEntity reply) async {
+    final replyCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(reply.postId)
+        .collection(FirebaseConst.comment)
+        .doc(reply.commentId)
+        .collection(FirebaseConst.reply);
+
+    Map<String, dynamic> replyInfo = {};
+
+    if (reply.description.isNotBlank) {
+      replyInfo['description'] = reply.description;
+    }
+
+    replyCollection.doc(reply.id).update(replyInfo);
   }
 }
