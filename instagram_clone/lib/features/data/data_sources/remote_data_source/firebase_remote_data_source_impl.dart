@@ -242,7 +242,10 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
       final postDocRef = await postCollection.doc(post.id).get();
 
       if (!postDocRef.exists) {
-        postCollection.doc(post.id).set(newPost);
+        postCollection
+            .doc(post.id)
+            .set(newPost)
+            .then((value) => _updateTotalPostsFromUser(post.creatorUid));
       } else {
         postCollection.doc(post.id).update(newPost);
       }
@@ -409,18 +412,6 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     commentCollection.doc(comment.id).update(commentInfo);
   }
 
-  void _updateTotalCommentsFromPost(String? postId, [int increment = 1]) {
-    final postCollection =
-        firebaseFirestore.collection(FirebaseConst.posts).doc(postId);
-    postCollection.get().then((value) {
-      if (value.exists) {
-        postCollection.update(
-          {'totalComments': FieldValue.increment(increment)},
-        );
-      }
-    });
-  }
-
   @override
   Future<void> createReply(ReplyEntity reply) async {
     final replyCollection = firebaseFirestore
@@ -445,7 +436,12 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     try {
       final replyDocRef = await replyCollection.doc(reply.id).get();
       if (!replyDocRef.exists) {
-        replyCollection.doc(reply.id).set(newReply);
+        replyCollection.doc(reply.id).set(newReply).then(
+              (value) => _updateTotalRepliesFromComment(
+                reply.postId,
+                reply.commentId,
+              ),
+            );
       } else {
         replyCollection.doc(reply.id).update(newReply);
       }
@@ -464,7 +460,12 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
         .collection(FirebaseConst.reply);
 
     try {
-      replyCollection.doc(reply.id).delete();
+      replyCollection.doc(reply.id).delete().then(
+            (value) => _updateTotalRepliesFromComment(
+              reply.postId,
+              reply.commentId,
+            ),
+          );
     } catch (e) {
       print('some error occured $e');
     }
@@ -522,5 +523,45 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     }
 
     replyCollection.doc(reply.id).update(replyInfo);
+  }
+
+  void _updateTotalPostsFromUser(String? uid, [int increment = 1]) {
+    final userCollection =
+        firebaseFirestore.collection(FirebaseConst.users).doc(uid);
+    userCollection.get().then((value) {
+      if (value.exists) {
+        userCollection.update({
+          'totalPosts': FieldValue.increment(increment),
+        });
+      }
+    });
+  }
+
+  void _updateTotalCommentsFromPost(String? postId, [int increment = 1]) {
+    final postCollection =
+        firebaseFirestore.collection(FirebaseConst.posts).doc(postId);
+    postCollection.get().then((value) {
+      if (value.exists) {
+        postCollection.update(
+          {'totalComments': FieldValue.increment(increment)},
+        );
+      }
+    });
+  }
+
+  void _updateTotalRepliesFromComment(String? postId, String? commentId,
+      [int increment = 1]) {
+    final commentCollection = firebaseFirestore
+        .collection(FirebaseConst.posts)
+        .doc(postId)
+        .collection(FirebaseConst.comment)
+        .doc(commentId);
+    commentCollection.get().then((value) {
+      if (value.exists) {
+        commentCollection.update(
+          {'totalReplies': FieldValue.increment(increment)},
+        );
+      }
+    });
   }
 }

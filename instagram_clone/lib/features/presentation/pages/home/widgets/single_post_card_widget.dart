@@ -68,22 +68,30 @@ class _SinglePostCardWidgetState extends State<SinglePostCardWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  CircleContainer(
-                    size: 30,
-                    child: Helper.profileWidget(
-                      imageUrl: widget.post.userProfileUrl,
-                    ),
-                  ),
-                  sizeHor(10),
-                  Text('${widget.post.username}', style: primaryBoldStyle),
-                ],
-              ),
               GestureDetector(
-                onTap: () => _openBottomModalSheet(context),
-                child: const Icon(Icons.more_vert, color: primaryColor),
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  PageConst.singleUserProfilePage,
+                  arguments: widget.post.creatorUid,
+                ),
+                child: Row(
+                  children: [
+                    CircleContainer(
+                      size: 30,
+                      child: Helper.profileWidget(
+                        imageUrl: widget.post.userProfileUrl,
+                      ),
+                    ),
+                    sizeHor(10),
+                    Text('${widget.post.username}', style: primaryBoldStyle),
+                  ],
+                ),
               ),
+              if (widget.post.creatorUid == _currentUid)
+                GestureDetector(
+                  onTap: () => _openBottomModalSheet(context),
+                  child: const Icon(Icons.more_vert, color: primaryColor),
+                ),
             ],
           ),
           sizeVer(10),

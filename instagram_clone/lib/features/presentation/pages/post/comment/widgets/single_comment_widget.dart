@@ -47,20 +47,14 @@ class _SingleCommentWidgetState extends State<SingleCommentWidget> {
   }
 
   _getReplies() {
-    // widget.comment.totalReplies == 0
-    //     ? Helper.toast('no replies')
-    //     : BlocProvider.of<ReplyCubit>(context).getReplies(
-    //         ReplyEntity(
-    //           commentId: widget.comment.id,
-    //           postId: widget.comment.postId,
-    //         ),
-    //       );
-    BlocProvider.of<ReplyCubit>(context).getReplies(
-      ReplyEntity(
-        commentId: widget.comment.id,
-        postId: widget.comment.postId,
-      ),
-    );
+    widget.comment.totalReplies == 0
+        ? Helper.toast('no replies')
+        : BlocProvider.of<ReplyCubit>(context).getReplies(
+            ReplyEntity(
+              commentId: widget.comment.id,
+              postId: widget.comment.postId,
+            ),
+          );
   }
 
   _createReply() {
@@ -116,7 +110,9 @@ class _SingleCommentWidgetState extends State<SingleCommentWidget> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onLongPress: widget.onLongPressListener,
+      onLongPress: widget.comment.creatorUid == _currentUid
+          ? widget.onLongPressListener
+          : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
