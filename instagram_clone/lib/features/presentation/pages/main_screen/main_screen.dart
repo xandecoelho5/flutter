@@ -62,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
             bottomNavigationBar: CupertinoTabBar(
               currentIndex: _currentIndex,
               backgroundColor: backgroundColor,
-              items: [
+              items: const [
                 BottomNavigationBarItem(
                   icon: Icon(
                     Icons.home,

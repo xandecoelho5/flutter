@@ -22,12 +22,15 @@ import 'package:instagram_clone/features/domain/usecases/firebase_usecases/reply
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/reply/read_reply_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/reply/update_reply_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/storage/upload_image_to_storage_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/follow_unfollow_user_usecase.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/get_single_other_user_usecase.dart';
 import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/sign_out_usecase.dart';
 import 'package:instagram_clone/features/presentation/cubit/comment/comment_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/credential/credential_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/get_single_post/get_single_post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/reply/reply_cubit.dart';
+import 'package:instagram_clone/features/presentation/cubit/user/get_single_other_user/get_single_other_user_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/user/user_cubit.dart';
 
 import '../features/domain/usecases/firebase_usecases/post/create_post_usecase.dart';
@@ -49,8 +52,9 @@ Future<void> init() async {
   //// User
   sl.registerFactory(() => AuthCubit(sl(), sl(), sl()));
   sl.registerFactory(() => CredentialCubit(sl(), sl()));
-  sl.registerFactory(() => UserCubit(sl(), sl()));
+  sl.registerFactory(() => UserCubit(sl(), sl(), sl()));
   sl.registerFactory(() => GetSingleUserCubit(sl()));
+  sl.registerFactory(() => GetSingleOtherUserCubit(sl()));
   //// Post
   sl.registerFactory(() => PostCubit(sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => GetSinglePostCubit(sl()));
@@ -70,6 +74,8 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetUsersUseCase(sl()));
   sl.registerLazySingleton(() => CreateUserUseCase(sl()));
   sl.registerLazySingleton(() => GetSingleUserUseCase(sl()));
+  sl.registerLazySingleton(() => GetSingleOtherUserUseCase(sl()));
+  sl.registerLazySingleton(() => FollowUnFollowUseCase(sl()));
   //// Cloud Storage
   sl.registerLazySingleton(() => UploadImageToStorageUseCase(sl()));
   //// Post

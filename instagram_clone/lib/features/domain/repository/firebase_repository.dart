@@ -21,11 +21,15 @@ abstract class FirebaseRepository {
 
   Stream<List<UserEntity>> getSingleUser(String uid);
 
+  Stream<List<UserEntity>> getSingleOtherUser(String otherUid);
+
   Future<String> getCurrentUid();
 
   Future<void> createUser(UserEntity user);
 
   Future<void> updateUser(UserEntity user);
+
+  Future<void> followUnFollowUser(UserEntity user);
 
   // Cloud Storage Features
   Future<String> uploadImageToStorage(

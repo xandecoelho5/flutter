@@ -9,6 +9,8 @@ import 'package:instagram_clone/features/presentation/pages/post/comment/edit_co
 import 'package:instagram_clone/features/presentation/pages/post/post_detail_page.dart';
 import 'package:instagram_clone/features/presentation/pages/post/update_post_page.dart';
 import 'package:instagram_clone/features/presentation/pages/profile/edit_profile_page.dart';
+import 'package:instagram_clone/features/presentation/pages/profile/followers_page.dart';
+import 'package:instagram_clone/features/presentation/pages/profile/following_page.dart';
 import 'package:instagram_clone/features/presentation/pages/profile/single_user_profile_page.dart';
 import 'package:instagram_clone/utils/consts.dart';
 
@@ -65,6 +67,20 @@ class OnGenerateRoute {
         return _routeBuilder(const SignInPage());
       case PageConst.signUpPage:
         return _routeBuilder(const SignUpPage());
+      case PageConst.followingPage:
+        {
+          if (args is UserEntity) {
+            return _routeBuilder(FollowingPage(user: args));
+          }
+          return _routeBuilder(const NoPageFound());
+        }
+      case PageConst.followersPage:
+        {
+          if (args is UserEntity) {
+            return _routeBuilder(FollowersPage(user: args));
+          }
+          return _routeBuilder(const NoPageFound());
+        }
       default:
         return _routeBuilder(const NoPageFound());
     }

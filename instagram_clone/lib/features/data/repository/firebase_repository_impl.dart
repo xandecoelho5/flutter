@@ -25,6 +25,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
       remoteDataSource.getSingleUser(uid);
 
   @override
+  Stream<List<UserEntity>> getSingleOtherUser(String otherUid) =>
+      remoteDataSource.getSingleOtherUser(otherUid);
+
+  @override
   Stream<List<UserEntity>> getUsers(UserEntity user) =>
       remoteDataSource.getUsers(user);
 
@@ -45,6 +49,10 @@ class FirebaseRepositoryImpl implements FirebaseRepository {
   @override
   Future<void> updateUser(UserEntity user) async =>
       remoteDataSource.updateUser(user);
+
+  @override
+  Future<void> followUnFollowUser(UserEntity user) async =>
+      remoteDataSource.followUnFollowUser(user);
 
   @override
   Future<String> uploadImageToStorage(

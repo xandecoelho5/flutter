@@ -106,6 +106,16 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
   }
 
   @override
+  Stream<List<UserEntity>> getSingleOtherUser(String otherUid) {
+    final userCollection = firebaseFirestore
+        .collection(FirebaseConst.users)
+        .where('uid', isEqualTo: otherUid)
+        .limit(1);
+    return userCollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map(UserModel.fromSnapshot).toList());
+  }
+
+  @override
   Stream<List<UserEntity>> getUsers(UserEntity user) {
     final userCollection = firebaseFirestore.collection(FirebaseConst.users);
     return userCollection.snapshots().map((querySnapshot) =>
@@ -196,6 +206,45 @@ class FirebaseRemoteDataSourceImpl implements FirebaseRemoteDataSource {
     }
 
     userCollection.doc(user.uid).update(userInformation);
+  }
+
+  @override
+  Future<void> followUnFollowUser(UserEntity user) async {
+    final userCollection = firebaseFirestore.collection(FirebaseConst.users);
+
+    final currentDocRef = await userCollection.doc(user.uid).get();
+    final otherDocRef = await userCollection.doc(user.otherUid).get();
+
+    if (currentDocRef.exists && otherDocRef.exists) {
+      List currentFollowing = currentDocRef.get('following');
+      List otherUserFollowers = otherDocRef.get('followers');
+
+      // Current Following List
+      if (currentFollowing.contains(user.otherUid)) {
+        userCollection.doc(user.uid).update({
+          'following': FieldValue.arrayRemove([user.otherUid]),
+          'totalFollowing': FieldValue.increment(-1),
+        });
+      } else {
+        userCollection.doc(user.uid).update({
+          'following': FieldValue.arrayUnion([user.otherUid]),
+          'totalFollowing': FieldValue.increment(1),
+        });
+      }
+
+      // Other User Followers List
+      if (otherUserFollowers.contains(user.uid)) {
+        userCollection.doc(user.otherUid).update({
+          'followers': FieldValue.arrayRemove([user.uid]),
+          'totalFollowers': FieldValue.increment(-1),
+        });
+      } else {
+        userCollection.doc(user.otherUid).update({
+          'followers': FieldValue.arrayUnion([user.uid]),
+          'totalFollowers': FieldValue.increment(1),
+        });
+      }
+    }
   }
 
   @override

@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:instagram_clone/features/domain/entities/posts/post_entity.dart';
 import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
+import 'package:instagram_clone/features/domain/usecases/firebase_usecases/user/get_current_uid_usecase.dart';
 import 'package:instagram_clone/features/presentation/cubit/auth/auth_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
-import 'package:instagram_clone/features/presentation/cubit/user/get_single_user/get_single_user_cubit.dart';
+import 'package:instagram_clone/features/presentation/cubit/user/get_single_other_user/get_single_other_user_cubit.dart';
+import 'package:instagram_clone/features/presentation/cubit/user/user_cubit.dart';
+import 'package:instagram_clone/features/presentation/widgets/button_container_widget.dart';
 import 'package:instagram_clone/features/presentation/widgets/circle_container.dart';
 import 'package:instagram_clone/utils/consts.dart';
 import 'package:instagram_clone/utils/helper.dart';
+import 'package:instagram_clone/utils/injection_container.dart' as di;
 
 class SingleUserProfileMainWidget extends StatefulWidget {
   const SingleUserProfileMainWidget({Key? key, required this.otherUserId})
@@ -22,12 +26,17 @@ class SingleUserProfileMainWidget extends StatefulWidget {
 
 class _SingleUserProfileMainWidgetState
     extends State<SingleUserProfileMainWidget> {
+  String _currentUid = '';
+
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<GetSingleUserCubit>(context)
-        .getSingleUser(widget.otherUserId);
+    BlocProvider.of<GetSingleOtherUserCubit>(context)
+        .getSingleOtherUser(widget.otherUserId);
     BlocProvider.of<PostCubit>(context).getPosts(const PostEntity());
+    di.sl<GetCurrentUidUseCase>().call().then(
+          (value) => setState(() => _currentUid = value),
+        );
   }
 
   _openBottomModalSheet(BuildContext context, UserEntity user) {
@@ -54,12 +63,19 @@ class _SingleUserProfileMainWidgetState
     ]);
   }
 
+  void _onFollowUnFollowTap(UserEntity user) {
+    BlocProvider.of<UserCubit>(context).followUnFollowUser(UserEntity(
+      uid: _currentUid,
+      otherUid: user.uid,
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetSingleUserCubit, GetSingleUserState>(
+    return BlocBuilder<GetSingleOtherUserCubit, GetSingleOtherUserState>(
       builder: (context, userState) {
-        if (userState is GetSingleUserLoaded) {
-          final user = userState.user;
+        if (userState is GetSingleOtherUserLoaded) {
+          final user = userState.otherUser;
           return Scaffold(
             backgroundColor: backgroundColor,
             appBar: AppBar(
@@ -68,15 +84,17 @@ class _SingleUserProfileMainWidgetState
                 '${user.username}',
                 style: const TextStyle(color: primaryColor),
               ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: InkWell(
-                    onTap: () => _openBottomModalSheet(context, user),
-                    child: const Icon(Icons.menu, color: primaryColor),
-                  ),
-                ),
-              ],
+              actions: _currentUid == user.uid
+                  ? [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: InkWell(
+                          onTap: () => _openBottomModalSheet(context, user),
+                          child: const Icon(Icons.menu, color: primaryColor),
+                        ),
+                      ),
+                    ]
+                  : [],
             ),
             body: Padding(
               padding: const EdgeInsets.all(10),
@@ -106,32 +124,46 @@ class _SingleUserProfileMainWidgetState
                               ],
                             ),
                             sizeHor(25),
-                            Column(
-                              children: [
-                                Text(
-                                  '${user.totalFollowers}',
-                                  style: primaryBoldStyle,
-                                ),
-                                sizeVer(8),
-                                const Text(
-                                  'Followers',
-                                  style: TextStyle(color: primaryColor),
-                                ),
-                              ],
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                PageConst.followersPage,
+                                arguments: user,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${user.totalFollowers}',
+                                    style: primaryBoldStyle,
+                                  ),
+                                  sizeVer(8),
+                                  const Text(
+                                    'Followers',
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ],
+                              ),
                             ),
                             sizeHor(25),
-                            Column(
-                              children: [
-                                Text(
-                                  '${user.totalFollowing}',
-                                  style: primaryBoldStyle,
-                                ),
-                                sizeVer(8),
-                                const Text(
-                                  'Following',
-                                  style: TextStyle(color: primaryColor),
-                                ),
-                              ],
+                            GestureDetector(
+                              onTap: () => Navigator.pushNamed(
+                                context,
+                                PageConst.followingPage,
+                                arguments: user,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    '${user.totalFollowing}',
+                                    style: primaryBoldStyle,
+                                  ),
+                                  sizeVer(8),
+                                  const Text(
+                                    'Following',
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -147,6 +179,17 @@ class _SingleUserProfileMainWidgetState
                       '${user.bio}',
                       style: const TextStyle(color: primaryColor),
                     ),
+                    if (_currentUid != user.uid) sizeVer(10),
+                    if (_currentUid != user.uid)
+                      ButtonContainerWidget(
+                        text: user.followers!.contains(_currentUid)
+                            ? 'UnFollow'
+                            : 'Follow',
+                        color: user.followers!.contains(_currentUid)
+                            ? secondaryColor.withOpacity(0.4)
+                            : blueColor,
+                        onTapListener: () => _onFollowUnFollowTap(user),
+                      ),
                     sizeVer(10),
                     BlocBuilder<PostCubit, PostState>(
                       builder: (context, postState) {

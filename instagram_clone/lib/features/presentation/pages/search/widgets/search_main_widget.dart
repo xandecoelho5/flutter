@@ -5,7 +5,7 @@ import 'package:instagram_clone/features/domain/entities/user/user_entity.dart';
 import 'package:instagram_clone/features/presentation/cubit/post/post_cubit.dart';
 import 'package:instagram_clone/features/presentation/cubit/user/user_cubit.dart';
 import 'package:instagram_clone/features/presentation/pages/search/widgets/search_widget.dart';
-import 'package:instagram_clone/features/presentation/widgets/circle_container.dart';
+import 'package:instagram_clone/features/presentation/widgets/user_tile_widget.dart';
 import 'package:instagram_clone/utils/consts.dart';
 import 'package:instagram_clone/utils/helper.dart';
 
@@ -57,26 +57,8 @@ class _SearchMainWidgetState extends State<SearchMainWidget> {
                         ? Expanded(
                             child: ListView.builder(
                               itemCount: filterAllUsers.length,
-                              itemBuilder: (context, index) {
-                                final user = filterAllUsers[index];
-                                return ListTile(
-                                  leading: CircleContainer(
-                                    size: 40,
-                                    child: Helper.profileWidget(
-                                      imageUrl: user.profileUrl,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    user.username!,
-                                    style: primaryBoldStyle,
-                                  ),
-                                  onTap: () => Navigator.pushNamed(
-                                    context,
-                                    PageConst.singleUserProfilePage,
-                                    arguments: user.uid,
-                                  ),
-                                );
-                              },
+                              itemBuilder: (context, index) =>
+                                  UserTileWidget(user: filterAllUsers[index]),
                             ),
                           )
                         : BlocBuilder<PostCubit, PostState>(
