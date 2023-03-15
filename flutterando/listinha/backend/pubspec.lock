@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.0"
+  charcode:
+    dependency: transitive
+    description:
+      name: charcode
+      sha256: fb98c0f6d12c920a02ee2d998da788bca066ca5f148492b7085ee23372b12306
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   collection:
     dependency: transitive
     description:
@@ -89,6 +97,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.4"
+  flutterando_analysis:
+    dependency: "direct dev"
+    description:
+      name: flutterando_analysis
+      sha256: "9541b7d6c849f3f82c8ac4f65116c8c4371d37ad691e6d6da905325707aa6244"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   frontend_server_client:
     dependency: transitive
     description:
@@ -137,14 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  lints:
-    dependency: "direct dev"
-    description:
-      name: lints
-      sha256: "5e4a9cd06d447758280a8ac2405101e0e2094d2a1dbdd3756aec3fe7775ba593"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.1"
   logging:
     dependency: transitive
     description:
@@ -193,6 +201,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+  modular_core:
+    dependency: transitive
+    description:
+      name: modular_core
+      sha256: "84cfe65d2ab15b0265a5bdb07a7a0408b06f8d92fee6fb94a3c85e97cbc2d6af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3+1"
+  modular_interfaces:
+    dependency: transitive
+    description:
+      name: modular_interfaces
+      sha256: "89db18038048d63de80871189ddc52363814e8181615459e5d88ed0a921acc1f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   node_preamble:
     dependency: transitive
     description:
@@ -225,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
+  postgresql2:
+    dependency: "direct main"
+    description:
+      name: postgresql2
+      sha256: fec1114a03b3b201caade763fdf8251a2dd02dc7f2ff689802fe5a3edad17500
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   pub_semver:
     dependency: transitive
     description:
@@ -233,6 +265,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.3"
+  redis:
+    dependency: "direct main"
+    description:
+      name: redis
+      sha256: "32e28eb1ba2e0fe2af50bbd06e675e4dfdce4f0ba95c5bc885c72383a1b0b47e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.0"
   result_dart:
     dependency: "direct main"
     description:
@@ -241,14 +281,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-  shelf:
+  rikulo_commons:
     dependency: transitive
+    description:
+      name: rikulo_commons
+      sha256: bbc0f78b499da295b880b7046bbcd6234c31d51de764b2840095127d6b4bc16d
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.1"
+  shelf:
+    dependency: "direct main"
     description:
       name: shelf
       sha256: c24a96135a2ccd62c64b69315a14adc5c3419df63b4d7c05832a346fdb73682c
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  shelf_modular:
+    dependency: "direct main"
+    description:
+      name: shelf_modular
+      sha256: "9781517e56cc61eef04d208e802dc00cc705d47ec7b195c2279189b7c0368414"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   shelf_packages_handler:
     dependency: transitive
     description:
